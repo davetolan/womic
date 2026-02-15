@@ -1,3 +1,6 @@
+packages:
+  - next-comic-platform
+
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver

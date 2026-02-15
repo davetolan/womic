@@ -1,0 +1,10 @@
+{
+  "name": "womic-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter next-comic-platform dev",
+    "build": "pnpm --filter next-comic-platform build",
+    "start": "pnpm --filter next-comic-platform start",
+    "lint": "pnpm --filter next-comic-platform lint"
+  }
+}
