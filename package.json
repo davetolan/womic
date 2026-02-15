@@ -1,6 +1,13 @@
 {
   "name": "womic-workspace",
   "private": true,
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "esbuild",
+      "unrs-resolver"
+    ]
+  },
   "scripts": {
     "dev": "pnpm --filter next-comic-platform dev",
     "build": "pnpm --filter next-comic-platform build",

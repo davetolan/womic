@@ -71,6 +71,8 @@ export interface Config {
     posts: Post;
     media: Media;
     categories: Category;
+    chapters: Chapter;
+    episodes: Episode;
     users: User;
     redirects: Redirect;
     forms: Form;
@@ -93,6 +95,8 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    chapters: ChaptersSelect<false> | ChaptersSelect<true>;
+    episodes: EpisodesSelect<false> | EpisodesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -780,6 +784,76 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "chapters".
+ */
+export interface Chapter {
+  id: number;
+  title: string;
+  slug: string;
+  chapterNumber: number;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "episodes".
+ */
+export interface Episode {
+  id: number;
+  title: string;
+  slug: string;
+  episodeNumber: number;
+  chapter?: (number | null) | Chapter;
+  publishDate: string;
+  thumbnail?: (number | null) | Media;
+  /**
+   * Add comic pages in reading order: page 1, page 2, page 3, etc.
+   */
+  pages: {
+    /**
+     * Upload the page image for this page index.
+     */
+    image: number | Media;
+    altText?: string | null;
+    /**
+     * Optional short title for this page.
+     */
+    pageTitle?: string | null;
+    /**
+     * Optional caption or note shown with this page.
+     */
+    caption?: string | null;
+    id?: string | null;
+  }[];
+  authorNotes?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Optional. Falls back to Episode title when blank.
+   */
+  seoTitle?: string | null;
+  /**
+   * Optional. Frontend can fall back to site/comic description when blank.
+   */
+  seoDescription?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -983,6 +1057,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'categories';
         value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'chapters';
+        value: number | Chapter;
+      } | null)
+    | ({
+        relationTo: 'episodes';
+        value: number | Episode;
       } | null)
     | ({
         relationTo: 'users';
@@ -1327,6 +1409,44 @@ export interface CategoriesSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "chapters_select".
+ */
+export interface ChaptersSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  chapterNumber?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "episodes_select".
+ */
+export interface EpisodesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  episodeNumber?: T;
+  chapter?: T;
+  publishDate?: T;
+  thumbnail?: T;
+  pages?:
+    | T
+    | {
+        image?: T;
+        altText?: T;
+        pageTitle?: T;
+        caption?: T;
+        id?: T;
+      };
+  authorNotes?: T;
+  seoTitle?: T;
+  seoDescription?: T;
   updatedAt?: T;
   createdAt?: T;
 }
