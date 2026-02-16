@@ -1,5 +1,9 @@
-import Image from "next/image";
-import Link from "next/link";
+import configPromise from '@payload-config';
+import Image from 'next/image';
+import Link from 'next/link';
+import { getPayload } from 'payload';
+
+import type { Episode } from '@/payload-types';
 
 type EpisodePreview = {
   title: string;
@@ -9,23 +13,70 @@ type EpisodePreview = {
   thumbnail: string;
 };
 
-export default function Home() {
-  const latestEpisode: EpisodePreview = {
-    title: "The Awakening",
-    slug: "the-awakening",
-    episodeNumber: 1,
-    publishDate: "2026-01-01",
-    thumbnail: "/placeholder-thumbnail.jpg",
-  };
+const FALLBACK_EPISODE: EpisodePreview = {
+  title: 'The Awakening',
+  slug: 'the-awakening',
+  episodeNumber: 1,
+  publishDate: '2026-01-01',
+  thumbnail: '/placeholder-thumbnail.jpg',
+};
 
-  const formattedPublishDate = new Date(latestEpisode.publishDate).toLocaleDateString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }
-  );
+function getThumbnailURL(thumbnail: Episode['thumbnail']): string {
+  if (thumbnail && typeof thumbnail === 'object' && 'url' in thumbnail && thumbnail.url) {
+    return thumbnail.url;
+  }
+
+  return '/placeholder-thumbnail.jpg';
+}
+
+function mapEpisodeToPreview(episode?: Episode): EpisodePreview | null {
+  if (!episode?.title || !episode?.slug || typeof episode.episodeNumber !== 'number') {
+    return null;
+  }
+
+  return {
+    title: episode.title,
+    slug: episode.slug,
+    episodeNumber: episode.episodeNumber,
+    publishDate: episode.publishDate,
+    thumbnail: getThumbnailURL(episode.thumbnail),
+  };
+}
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+
+  if (Number.isNaN(date.getTime())) {
+    return dateString;
+  }
+
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
+async function getLatestEpisode(): Promise<EpisodePreview> {
+  try {
+    const payload = await getPayload({ config: configPromise });
+    const result = await payload.find({
+      collection: 'episodes',
+      limit: 1,
+      sort: '-episodeNumber',
+      depth: 1,
+    });
+
+    return mapEpisodeToPreview(result.docs[0]) ?? FALLBACK_EPISODE;
+  } catch (error) {
+    console.error('Failed to load latest episode from Payload:', error);
+    return FALLBACK_EPISODE;
+  }
+}
+
+export default async function Home() {
+  const latestEpisode = await getLatestEpisode();
+  const formattedPublishDate = formatDate(latestEpisode.publishDate);
 
   return (
     <main className="min-h-screen bg-zinc-50 px-4 py-10 text-zinc-900 sm:px-6 lg:px-8">
@@ -75,9 +126,7 @@ export default function Home() {
               />
             </div>
             <div className="flex flex-col gap-3">
-              <p className="text-sm font-medium text-zinc-600">
-                Episode {latestEpisode.episodeNumber}
-              </p>
+              <p className="text-sm font-medium text-zinc-600">Episode {latestEpisode.episodeNumber}</p>
               <h3 className="text-xl font-semibold">{latestEpisode.title}</h3>
               <p className="text-sm text-zinc-700">Published {formattedPublishDate}</p>
               <div className="pt-2">
