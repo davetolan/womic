@@ -42,7 +42,10 @@ export const Episodes: CollectionConfig = {
         }
         return true
       },
-      admin: { position: 'sidebar' },
+      admin: {
+        position: 'sidebar',
+        description: 'Episode number (used for ordering).',
+      },
     },
     {
       name: 'chapter',
@@ -55,7 +58,20 @@ export const Episodes: CollectionConfig = {
       name: 'publishDate',
       type: 'date',
       required: true,
-      admin: { position: 'sidebar' },
+      admin: {
+        position: 'sidebar',
+        description: 'Used with draft/published status and optional scheduled publishing.',
+      },
+    },
+
+    {
+      name: 'startHere',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Optional: mark this as the recommended entry point for new readers.',
+      },
     },
 
     {
@@ -76,7 +92,8 @@ export const Episodes: CollectionConfig = {
         return true
       },
       admin: {
-        description: 'Add comic pages in reading order: page 1, page 2, page 3, etc.',
+        description: 'Pages are read in this order. Drag and drop rows to reorder.',
+        initCollapsed: false,
       },
       fields: [
         {
@@ -151,6 +168,48 @@ export const Episodes: CollectionConfig = {
           data.seoTitle = data.title
         }
         return data
+      },
+    ],
+    afterChange: [
+      async ({ doc, req }) => {
+        if (!doc.startHere) {
+          return doc
+        }
+
+        const otherStartHereEpisodes = await req.payload.find({
+          collection: 'episodes',
+          depth: 0,
+          limit: 1000,
+          pagination: false,
+          where: {
+            and: [
+              {
+                startHere: {
+                  equals: true,
+                },
+              },
+              {
+                id: {
+                  not_equals: doc.id,
+                },
+              },
+            ],
+          },
+        })
+
+        await Promise.all(
+          otherStartHereEpisodes.docs.map((episode) =>
+            req.payload.update({
+              collection: 'episodes',
+              id: episode.id,
+              data: {
+                startHere: false,
+              },
+            }),
+          ),
+        )
+
+        return doc
       },
     ],
   },
