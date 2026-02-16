@@ -2,7 +2,7 @@ import configPromise from '@payload-config'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getPayload } from 'payload'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 
 import type { Episode } from '@/payload-types'
 
@@ -42,6 +42,10 @@ const getEpisodeBySlug = async (slug: string): Promise<Episode | null> => {
 export default async function EpisodePage({ params: paramsPromise }: Args) {
   const { slug, page } = await paramsPromise
 
+  if (!slug?.trim()) {
+    notFound()
+  }
+
   const pageNumber = Number(page)
   if (!Number.isInteger(pageNumber) || pageNumber < 1) {
     notFound()
@@ -54,7 +58,7 @@ export default async function EpisodePage({ params: paramsPromise }: Args) {
 
   const totalPages = episode.pages.length
   if (pageNumber > totalPages) {
-    notFound()
+    redirect(`/episode/${episode.slug}/${totalPages}`)
   }
 
   const currentPage = episode.pages[pageNumber - 1]
