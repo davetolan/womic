@@ -39,6 +39,25 @@ const getEpisodeBySlug = async (slug: string): Promise<Episode | null> => {
   return result.docs[0] || null
 }
 
+const getNextEpisode = async (episodeNumber: number): Promise<Episode | null> => {
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'episodes',
+    limit: 1,
+    pagination: false,
+    depth: 0,
+    sort: 'episodeNumber',
+    where: {
+      episodeNumber: {
+        greater_than: episodeNumber,
+      },
+    },
+  })
+
+  return result.docs[0] || null
+}
+
 export default async function EpisodePage({ params: paramsPromise }: Args) {
   const { slug, page } = await paramsPromise
 
@@ -60,6 +79,7 @@ export default async function EpisodePage({ params: paramsPromise }: Args) {
   if (pageNumber > totalPages) {
     redirect(`/episode/${episode.slug}/${totalPages}`)
   }
+  const nextEpisode = await getNextEpisode(episode.episodeNumber)
 
   const currentPage = episode.pages[pageNumber - 1]
   const imageURL = getPageImageURL(currentPage.image)
@@ -96,9 +116,12 @@ export default async function EpisodePage({ params: paramsPromise }: Args) {
               Previous Page
             </Link>
           ) : (
-            <span className="inline-flex items-center rounded-lg border border-zinc-200 bg-zinc-100 px-4 py-2.5 text-sm font-semibold text-zinc-400">
-              Previous Page
-            </span>
+            <Link
+              href="/archive"
+              className="inline-flex items-center justify-center rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-100"
+            >
+              Back to Archive
+            </Link>
           )}
 
           {pageNumber < totalPages ? (
@@ -108,13 +131,17 @@ export default async function EpisodePage({ params: paramsPromise }: Args) {
             >
               Next Page
             </Link>
-          ) : (
+          ) : nextEpisode?.slug ? (
             <Link
-              href="/archive"
+              href={`/episode/${nextEpisode.slug}/1`}
               className="inline-flex items-center justify-center rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-700"
             >
-              Back to Archive
+              Next Episode
             </Link>
+          ) : (
+            <span className="inline-flex items-center rounded-lg bg-zinc-300 px-4 py-2.5 text-sm font-semibold text-zinc-600">
+              Next Episode
+            </span>
           )}
         </nav>
       </div>
