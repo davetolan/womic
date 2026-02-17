@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, CollectionAfterReadHook } from 'payload'
 
 import {
   FixedToolbarFeature,
@@ -79,6 +79,34 @@ export const Media: CollectionConfig = {
         height: 630,
         crop: 'center',
       },
+    ],
+  },
+  hooks: {
+    afterRead: [
+      (({ doc }) => {
+        // Work around payload-cloudinary static handler path/public_id mismatches by
+        // preferring Cloudinary's canonical delivery URL when available.
+        if (!doc || typeof doc !== 'object') return doc
+
+        const maybeDoc = doc as {
+          url?: string | null
+          thumbnailURL?: string | null
+          cloudinary?: {
+            secure_url?: string | null
+            thumbnail_url?: string | null
+          } | null
+        }
+
+        if (maybeDoc.cloudinary?.secure_url) {
+          maybeDoc.url = maybeDoc.cloudinary.secure_url
+        }
+
+        if (maybeDoc.cloudinary?.thumbnail_url) {
+          maybeDoc.thumbnailURL = maybeDoc.cloudinary.thumbnail_url
+        }
+
+        return maybeDoc
+      }) as CollectionAfterReadHook,
     ],
   },
 }

@@ -1388,6 +1388,67 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
+  brand?: {
+    /**
+     * Upload a custom logo from Media. Recommended: 520x160px (horizontal), transparent PNG/WebP or SVG, under 200KB.
+     */
+    logoMedia?: (number | null) | Media;
+    /**
+     * Accessible alt text for the custom logo image.
+     */
+    logoAlt?: string | null;
+    showTitle?: boolean | null;
+    /**
+     * Brand title shown next to the logo.
+     */
+    title?: string | null;
+    /**
+     * Optional subtitle shown under the title.
+     */
+    subtitle?: string | null;
+  };
+  style?: {
+    variant?: ('default' | 'light' | 'dark' | 'glass') | null;
+    sticky?: boolean | null;
+    showBottomBorder?: boolean | null;
+    containerWidth?: ('default' | 'wide') | null;
+    navAlignment?: ('right' | 'left') | null;
+    showSearch?: boolean | null;
+  };
+  colors?: {
+    /**
+     * Header background color (hex, rgb, hsl, or CSS color name).
+     */
+    backgroundColor?: string | null;
+    /**
+     * Default header text color.
+     */
+    textColor?: string | null;
+    /**
+     * Muted text color (for subtitle).
+     */
+    mutedTextColor?: string | null;
+    /**
+     * Navigation link color.
+     */
+    linkColor?: string | null;
+    /**
+     * Search icon color.
+     */
+    searchIconColor?: string | null;
+    /**
+     * Header border color when bottom border is enabled.
+     */
+    borderColor?: string | null;
+    /**
+     * Optional CTA button background color.
+     */
+    ctaBackgroundColor?: string | null;
+    /**
+     * Optional CTA button text color.
+     */
+    ctaTextColor?: string | null;
+  };
   navItems?:
     | {
         link: {
@@ -1408,6 +1469,31 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Optional call-to-action button in the header.
+   */
+  ctaLink: {
+    enabled?: boolean | null;
+    link: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'episodes';
+            value: number | Episode;
+          } | null)
+        | ({
+            relationTo: 'chapters';
+            value: number | Chapter;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1417,6 +1503,48 @@ export interface Header {
  */
 export interface Footer {
   id: number;
+  brand?: {
+    /**
+     * Upload a custom footer logo from Media. Recommended: 520x200px max, transparent PNG/WebP or SVG, under 200KB.
+     */
+    logoMedia?: (number | null) | Media;
+    /**
+     * Accessible alt text for the custom footer logo image.
+     */
+    logoAlt?: string | null;
+    title?: string | null;
+    description?: string | null;
+  };
+  style?: {
+    variant?: ('dark' | 'light' | 'minimal') | null;
+    showThemeSelector?: boolean | null;
+  };
+  colors?: {
+    /**
+     * Footer background color (hex, rgb, hsl, or CSS color name).
+     */
+    backgroundColor?: string | null;
+    /**
+     * Default footer text color.
+     */
+    textColor?: string | null;
+    /**
+     * Muted footer text color.
+     */
+    mutedTextColor?: string | null;
+    /**
+     * Footer link color.
+     */
+    linkColor?: string | null;
+    /**
+     * Footer border color.
+     */
+    borderColor?: string | null;
+  };
+  /**
+   * Optional footer background image from Media. Recommended: 2400x1200px (2:1) minimum, JPG/WebP, under 800KB.
+   */
+  backgroundMedia?: (number | null) | Media;
   navItems?:
     | {
         link: {
@@ -1437,6 +1565,37 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
+  socialHeading?: string | null;
+  /**
+   * Optional: choose specific social links for the global footer. Leave empty to show all.
+   */
+  socialLinks?: (number | SocialLink)[] | null;
+  legal?: {
+    /**
+     * Example: © 2026 Hell Versus You. All rights reserved.
+     */
+    copyright?: string | null;
+    legalLinks?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'episodes';
+                  value: number | Episode;
+                } | null)
+              | ({
+                  relationTo: 'chapters';
+                  value: number | Chapter;
+                } | null);
+            url?: string | null;
+            label: string;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1445,6 +1604,37 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  brand?:
+    | T
+    | {
+        logoMedia?: T;
+        logoAlt?: T;
+        showTitle?: T;
+        title?: T;
+        subtitle?: T;
+      };
+  style?:
+    | T
+    | {
+        variant?: T;
+        sticky?: T;
+        showBottomBorder?: T;
+        containerWidth?: T;
+        navAlignment?: T;
+        showSearch?: T;
+      };
+  colors?:
+    | T
+    | {
+        backgroundColor?: T;
+        textColor?: T;
+        mutedTextColor?: T;
+        linkColor?: T;
+        searchIconColor?: T;
+        borderColor?: T;
+        ctaBackgroundColor?: T;
+        ctaTextColor?: T;
+      };
   navItems?:
     | T
     | {
@@ -1459,6 +1649,21 @@ export interface HeaderSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  ctaLink?:
+    | T
+    | {
+        enabled?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1468,6 +1673,30 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  brand?:
+    | T
+    | {
+        logoMedia?: T;
+        logoAlt?: T;
+        title?: T;
+        description?: T;
+      };
+  style?:
+    | T
+    | {
+        variant?: T;
+        showThemeSelector?: T;
+      };
+  colors?:
+    | T
+    | {
+        backgroundColor?: T;
+        textColor?: T;
+        mutedTextColor?: T;
+        linkColor?: T;
+        borderColor?: T;
+      };
+  backgroundMedia?: T;
   navItems?:
     | T
     | {
@@ -1481,6 +1710,27 @@ export interface FooterSelect<T extends boolean = true> {
               label?: T;
             };
         id?: T;
+      };
+  socialHeading?: T;
+  socialLinks?: T;
+  legal?:
+    | T
+    | {
+        copyright?: T;
+        legalLinks?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
