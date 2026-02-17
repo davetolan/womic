@@ -109,13 +109,27 @@ export default async function Home() {
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-12">
         <header className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
           <p className="text-sm font-semibold uppercase tracking-wide text-zinc-600">
-            Next Comic Platform
+            Hell Versus You
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            A page-by-page comic reading experience.
+            Two souls enter the in-between. Only one returns alive.
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-700">
-            Follow the latest episodes, read each page in sequence, and stay updated as new chapters are published.
+            An accidental murder sends both victim and killer to a realm between life and death.
+            Only one may return as they compete for a final chance to win their life
+            back.
+          </p>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-600">
+            Fantasy. Recommended for ages 16+. Built for readers who love D&D, deep worldbuilding,
+            and character-focused narratives.
+          </p>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">
+            This site exists to publish new episodes consistently and serve as portfolio exposure
+            for the Hell Versus You project.
+          </p>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">
+            Updates are planned monthly, with at least two pages per episode update (irregular
+            panel counts).
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Link

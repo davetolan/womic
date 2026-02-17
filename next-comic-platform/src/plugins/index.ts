@@ -15,7 +15,7 @@ type SeoDoc = {
 }
 
 const generateTitle: GenerateTitle<SeoDoc> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
+  return doc?.title ? `${doc.title} | Hell Versus You` : 'Hell Versus You'
 }
 
 const generateURL: GenerateURL<SeoDoc> = ({ doc }) => {
