@@ -8,6 +8,7 @@ export const NewsletterSubscribers: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
     defaultColumns: ['email', 'createdAt'],
+    hideAPIURL: true,
   },
   access: {
     create: anyone,

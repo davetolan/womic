@@ -7,6 +7,7 @@ export const Episodes: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['episodeNumber', 'title', 'publishDate', 'updatedAt'],
+    hideAPIURL: true,
   },
   access: {
     read: () => true,

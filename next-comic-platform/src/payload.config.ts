@@ -9,6 +9,7 @@ import { Episodes } from './collections/Episodes'
 import { Media } from './collections/Media'
 import { NewsletterNotices } from './collections/NewsletterNotices'
 import { NewsletterSubscribers } from './collections/NewsletterSubscribers'
+import { SocialLinks } from './collections/SocialLinks'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
@@ -63,7 +64,15 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Media, Chapters, Episodes, NewsletterSubscribers, NewsletterNotices, Users],
+  collections: [
+    Media,
+    Chapters,
+    Episodes,
+    NewsletterSubscribers,
+    NewsletterNotices,
+    SocialLinks,
+    Users,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,

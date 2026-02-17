@@ -72,6 +72,7 @@ export interface Config {
     episodes: Episode;
     'newsletter-subscribers': NewsletterSubscriber;
     'newsletter-notices': NewsletterNotice;
+    'social-links': SocialLink;
     users: User;
     redirects: Redirect;
     forms: Form;
@@ -94,6 +95,7 @@ export interface Config {
     episodes: EpisodesSelect<false> | EpisodesSelect<true>;
     'newsletter-subscribers': NewsletterSubscribersSelect<false> | NewsletterSubscribersSelect<true>;
     'newsletter-notices': NewsletterNoticesSelect<false> | NewsletterNoticesSelect<true>;
+    'social-links': SocialLinksSelect<false> | SocialLinksSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -444,6 +446,35 @@ export interface NewsletterNotice {
   sendNotice?: boolean | null;
   recipientCount?: number | null;
   sentAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links".
+ */
+export interface SocialLink {
+  id: number;
+  /**
+   * Display name shown to users (for example: Instagram).
+   */
+  label: string;
+  platform:
+    | 'instagram'
+    | 'tiktok'
+    | 'youtube'
+    | 'twitter'
+    | 'threads'
+    | 'bluesky'
+    | 'facebook'
+    | 'patreon'
+    | 'discord'
+    | 'other';
+  url: string;
+  /**
+   * Lower numbers appear first.
+   */
+  sortOrder?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -827,6 +858,10 @@ export interface PayloadLockedDocument {
         value: number | NewsletterNotice;
       } | null)
     | ({
+        relationTo: 'social-links';
+        value: number | SocialLink;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
@@ -1061,6 +1096,18 @@ export interface NewsletterNoticesSelect<T extends boolean = true> {
   sendNotice?: T;
   recipientCount?: T;
   sentAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links_select".
+ */
+export interface SocialLinksSelect<T extends boolean = true> {
+  label?: T;
+  platform?: T;
+  url?: T;
+  sortOrder?: T;
   updatedAt?: T;
   createdAt?: T;
 }

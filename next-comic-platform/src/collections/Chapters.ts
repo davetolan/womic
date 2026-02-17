@@ -6,6 +6,7 @@ export const Chapters: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['chapterNumber', 'title', 'updatedAt'],
+    hideAPIURL: true,
   },
   access: {
     read: () => true,
