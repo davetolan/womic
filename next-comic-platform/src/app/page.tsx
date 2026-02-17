@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getPayload } from 'payload';
 
 import type { Episode } from '@/payload-types';
+import { buildCloudinaryImageURL, getCloudinaryPublicIdFromMedia } from '@/utilities/cloudinary';
 
 type EpisodePreview = {
   title: string;
@@ -21,9 +22,34 @@ const FALLBACK_EPISODE: EpisodePreview = {
   thumbnail: '/placeholder-thumbnail.jpg',
 };
 
-function getThumbnailURL(thumbnail: Episode['thumbnail']): string {
-  if (thumbnail && typeof thumbnail === 'object' && 'url' in thumbnail && thumbnail.url) {
-    return thumbnail.url;
+function getThumbnailURL(episode: Episode): string {
+  const thumbnailSource =
+    (episode.thumbnail && typeof episode.thumbnail === 'object' && episode.thumbnail) ||
+    (episode.pages?.[0]?.image &&
+      typeof episode.pages[0].image === 'object' &&
+      episode.pages[0].image) ||
+    null;
+
+  if (thumbnailSource) {
+    const cloudinaryPublicId = getCloudinaryPublicIdFromMedia(thumbnailSource);
+    const transformedURL = cloudinaryPublicId
+      ? buildCloudinaryImageURL(cloudinaryPublicId, {
+          crop: 'fill',
+          gravity: 'auto',
+          width: 440,
+          height: 620,
+          quality: 'auto',
+          format: 'auto',
+        })
+      : null;
+
+    if (transformedURL) {
+      return transformedURL;
+    }
+
+    if ('url' in thumbnailSource && thumbnailSource.url) {
+      return thumbnailSource.url;
+    }
   }
 
   return '/placeholder-thumbnail.jpg';
@@ -39,7 +65,7 @@ function mapEpisodeToPreview(episode?: Episode): EpisodePreview | null {
     slug: episode.slug,
     episodeNumber: episode.episodeNumber,
     publishDate: episode.publishDate,
-    thumbnail: getThumbnailURL(episode.thumbnail),
+    thumbnail: getThumbnailURL(episode),
   };
 }
 

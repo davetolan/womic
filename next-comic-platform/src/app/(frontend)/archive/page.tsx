@@ -4,12 +4,36 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 
 import type { Episode } from '@/payload-types'
+import { buildCloudinaryImageURL, getCloudinaryPublicIdFromMedia } from '@/utilities/cloudinary'
 
 const FALLBACK_THUMBNAIL = '/placeholder-thumbnail.jpg'
 
-const getThumbnailURL = (thumbnail: Episode['thumbnail']): string => {
-  if (thumbnail && typeof thumbnail === 'object' && 'url' in thumbnail && thumbnail.url) {
-    return thumbnail.url
+const getThumbnailURL = (episode: Episode): string => {
+  const thumbnailSource =
+    (episode.thumbnail && typeof episode.thumbnail === 'object' && episode.thumbnail) ||
+    (episode.pages?.[0]?.image && typeof episode.pages[0].image === 'object' && episode.pages[0].image) ||
+    null
+
+  if (thumbnailSource) {
+    const cloudinaryPublicId = getCloudinaryPublicIdFromMedia(thumbnailSource)
+    const transformedURL = cloudinaryPublicId
+      ? buildCloudinaryImageURL(cloudinaryPublicId, {
+          crop: 'fill',
+          gravity: 'auto',
+          width: 600,
+          height: 840,
+          quality: 'auto',
+          format: 'auto',
+        })
+      : null
+
+    if (transformedURL) {
+      return transformedURL
+    }
+
+    if ('url' in thumbnailSource && thumbnailSource.url) {
+      return thumbnailSource.url
+    }
   }
 
   return FALLBACK_THUMBNAIL
@@ -63,7 +87,7 @@ export default async function ArchivePage() {
                 className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm"
               >
                 <Image
-                  src={getThumbnailURL(episode.thumbnail)}
+                  src={getThumbnailURL(episode)}
                   alt={`${episode.title} thumbnail`}
                   width={640}
                   height={900}

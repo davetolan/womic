@@ -1,11 +1,13 @@
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
+import { cloudinaryStorage } from 'payload-cloudinary'
 import { Plugin } from 'payload'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { getServerSideURL } from '@/utilities/getURL'
+import { Media } from '@/collections/Media'
 
 type SeoDoc = {
   title?: string | null
@@ -23,6 +25,16 @@ const generateURL: GenerateURL<SeoDoc> = ({ doc }) => {
 }
 
 export const plugins: Plugin[] = [
+  cloudinaryStorage({
+    collections: {
+      [Media.slug]: true,
+    },
+    config: {
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
+      api_key: process.env.CLOUDINARY_API_KEY || '',
+      api_secret: process.env.CLOUDINARY_API_SECRET || '',
+    },
+  }),
   redirectsPlugin({
     collections: ['episodes', 'chapters'],
     overrides: {

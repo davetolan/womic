@@ -5,6 +5,7 @@ import { getPayload } from 'payload'
 import { notFound, redirect } from 'next/navigation'
 
 import type { Episode } from '@/payload-types'
+import { buildCloudinaryImageURL, getCloudinaryPublicIdFromMedia } from '@/utilities/cloudinary'
 
 type Args = {
   params: Promise<{
@@ -14,8 +15,24 @@ type Args = {
 }
 
 const getPageImageURL = (image: Episode['pages'][number]['image']): string => {
-  if (image && typeof image === 'object' && 'url' in image && image.url) {
-    return image.url
+  if (image && typeof image === 'object') {
+    const cloudinaryPublicId = getCloudinaryPublicIdFromMedia(image)
+    const transformedURL = cloudinaryPublicId
+      ? buildCloudinaryImageURL(cloudinaryPublicId, {
+          crop: 'limit',
+          width: 1600,
+          quality: 'auto',
+          format: 'auto',
+        })
+      : null
+
+    if (transformedURL) {
+      return transformedURL
+    }
+
+    if ('url' in image && image.url) {
+      return image.url
+    }
   }
 
   return '/placeholder-thumbnail.jpg'
