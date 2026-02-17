@@ -4,11 +4,14 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 
+import { Categories } from './collections/Categories'
 import { Chapters } from './collections/Chapters'
 import { Episodes } from './collections/Episodes'
 import { Media } from './collections/Media'
 import { NewsletterNotices } from './collections/NewsletterNotices'
 import { NewsletterSubscribers } from './collections/NewsletterSubscribers'
+import { Pages } from './collections/Pages'
+import { Posts } from './collections/Posts'
 import { SocialLinks } from './collections/SocialLinks'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
@@ -66,6 +69,9 @@ export default buildConfig({
   }),
   collections: [
     Media,
+    Categories,
+    Pages,
+    Posts,
     Chapters,
     Episodes,
     NewsletterSubscribers,

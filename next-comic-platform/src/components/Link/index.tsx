@@ -3,7 +3,7 @@ import { cn } from '@/utilities/ui'
 import Link from 'next/link'
 import React from 'react'
 
-import type { Chapter, Episode } from '@/payload-types'
+import type { Chapter, Episode, Page } from '@/payload-types'
 
 type CMSLinkType = {
   appearance?: 'inline' | ButtonProps['variant']
@@ -13,8 +13,8 @@ type CMSLinkType = {
   newTab?: boolean | null
   style?: React.CSSProperties
   reference?: {
-    relationTo: 'episodes' | 'chapters'
-    value: Episode | Chapter | string | number
+    relationTo: 'pages' | 'episodes' | 'chapters'
+    value: Page | Episode | Chapter | string | number
   } | null
   size?: ButtonProps['size'] | null
   type?: 'custom' | 'reference' | null
@@ -39,7 +39,11 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     type === 'reference' && typeof reference?.value === 'object' && reference.value.slug
       ? reference?.relationTo === 'episodes'
         ? `/episode/${reference.value.slug}/1`
-        : `/chapter/${reference.value.slug}`
+        : reference?.relationTo === 'chapters'
+          ? `/chapter/${reference.value.slug}`
+          : reference.value.slug === 'home'
+            ? '/'
+            : `/${reference.value.slug}`
       : url
 
   if (!href) return null
