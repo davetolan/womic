@@ -70,6 +70,8 @@ export interface Config {
     media: Media;
     chapters: Chapter;
     episodes: Episode;
+    'newsletter-subscribers': NewsletterSubscriber;
+    'newsletter-notices': NewsletterNotice;
     users: User;
     redirects: Redirect;
     forms: Form;
@@ -90,6 +92,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     chapters: ChaptersSelect<false> | ChaptersSelect<true>;
     episodes: EpisodesSelect<false> | EpisodesSelect<true>;
+    'newsletter-subscribers': NewsletterSubscribersSelect<false> | NewsletterSubscribersSelect<true>;
+    'newsletter-notices': NewsletterNoticesSelect<false> | NewsletterNoticesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -404,6 +408,44 @@ export interface Episode {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter-subscribers".
+ */
+export interface NewsletterSubscriber {
+  id: number;
+  email: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter-notices".
+ */
+export interface NewsletterNotice {
+  id: number;
+  subject: string;
+  /**
+   * Main notice body sent to all subscribers.
+   */
+  message: string;
+  /**
+   * Optional. If selected, email CTA links to page 1 of this episode.
+   */
+  episode?: (number | null) | Episode;
+  /**
+   * Used when no episode is selected. Must be a relative path.
+   */
+  archivePath?: string | null;
+  /**
+   * Check and save to send this notice to all newsletter subscribers.
+   */
+  sendNotice?: boolean | null;
+  recipientCount?: number | null;
+  sentAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -777,6 +819,14 @@ export interface PayloadLockedDocument {
         value: number | Episode;
       } | null)
     | ({
+        relationTo: 'newsletter-subscribers';
+        value: number | NewsletterSubscriber;
+      } | null)
+    | ({
+        relationTo: 'newsletter-notices';
+        value: number | NewsletterNotice;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
@@ -989,6 +1039,30 @@ export interface EpisodesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter-subscribers_select".
+ */
+export interface NewsletterSubscribersSelect<T extends boolean = true> {
+  email?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter-notices_select".
+ */
+export interface NewsletterNoticesSelect<T extends boolean = true> {
+  subject?: T;
+  message?: T;
+  episode?: T;
+  archivePath?: T;
+  sendNotice?: T;
+  recipientCount?: T;
+  sentAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

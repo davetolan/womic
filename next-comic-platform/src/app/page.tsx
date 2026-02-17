@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getPayload } from 'payload';
 
+import { NewsletterSignupForm } from '@/components/NewsletterSignupForm';
 import type { Episode } from '@/payload-types';
 import { buildCloudinaryImageURL, getCloudinaryPublicIdFromMedia } from '@/utilities/cloudinary';
 
@@ -105,7 +106,7 @@ export default async function Home() {
   const formattedPublishDate = formatDate(latestEpisode.publishDate);
 
   return (
-    <main className="min-h-screen bg-zinc-50 px-4 py-10 text-zinc-900 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-zinc-50 px-4 py-10 font-sans text-zinc-900 sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-12">
         <header className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
           <p className="text-sm font-semibold uppercase tracking-wide text-zinc-600">
@@ -189,27 +190,9 @@ export default async function Home() {
             Newsletter
           </h2>
           <p className="mt-3 max-w-xl text-sm leading-6 text-zinc-700">
-            Get notified when a new episode drops. Newsletter signup wiring is coming soon.
+            Get notified when a new episode drops.
           </p>
-          <form className="mt-5 flex flex-col gap-3 sm:flex-row" aria-label="Newsletter signup placeholder">
-            <label htmlFor="email" className="sr-only">
-              Email address
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              className="w-full rounded-lg border border-zinc-300 px-3 py-2.5 text-sm outline-none ring-zinc-300 placeholder:text-zinc-500 focus:ring-2"
-              disabled
-            />
-            <button
-              type="button"
-              className="inline-flex items-center justify-center rounded-lg bg-zinc-300 px-5 py-2.5 text-sm font-semibold text-zinc-700"
-              disabled
-            >
-              Coming Soon
-            </button>
-          </form>
+          <NewsletterSignupForm />
         </section>
       </div>
     </main>
