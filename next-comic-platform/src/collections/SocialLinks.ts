@@ -2,6 +2,10 @@ import type { CollectionConfig } from 'payload'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
+import {
+  revalidateSocialLinks,
+  revalidateSocialLinksDelete,
+} from './SocialLinks/hooks/revalidateSocialLinks'
 
 export const SocialLinks: CollectionConfig = {
   slug: 'social-links',
@@ -72,4 +76,8 @@ export const SocialLinks: CollectionConfig = {
     },
   ],
   defaultSort: 'sortOrder',
+  hooks: {
+    afterChange: [revalidateSocialLinks],
+    afterDelete: [revalidateSocialLinksDelete],
+  },
 }
