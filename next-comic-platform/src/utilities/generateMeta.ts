@@ -4,6 +4,7 @@ import type { Media, Page, Post, Config } from '../payload-types'
 
 import { mergeOpenGraph } from './mergeOpenGraph'
 import { getServerSideURL } from './getURL'
+import { buildTabTitle, getCachedSiteSettings, getSiteTitle } from './siteSettings'
 
 const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
   const serverUrl = getServerSideURL()
@@ -23,12 +24,12 @@ export const generateMeta = async (args: {
   doc: Partial<Page> | Partial<Post> | null
 }): Promise<Metadata> => {
   const { doc } = args
+  const siteSettings = await getCachedSiteSettings()()
+  const siteTitle = getSiteTitle(siteSettings)
 
   const ogImage = getImageURL(doc?.meta?.image)
 
-  const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | Hell Versus You'
-    : 'Hell Versus You'
+  const title = buildTabTitle(siteTitle, doc?.meta?.title)
 
   return {
     description: doc?.meta?.description,
@@ -41,6 +42,7 @@ export const generateMeta = async (args: {
             },
           ]
         : undefined,
+      siteName: siteTitle,
       title,
       url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
     }),

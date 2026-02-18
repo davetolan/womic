@@ -11,6 +11,7 @@ import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { buildTabTitle, getCachedSiteSettings, getSiteFaviconURL, getSiteTitle } from '@/utilities/siteSettings'
 import { draftMode } from 'next/headers'
 
 import './globals.css'
@@ -29,8 +30,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html className={cn(patrickHand.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
       <head>
         <InitTheme />
-        <link href="/favicon.ico" rel="icon" sizes="32x32" />
-        <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
       <body>
         <Providers>
@@ -49,21 +48,25 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   )
 }
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getServerSideURL()),
-  description:
-    'Fantasy comic for ages 16+, built for readers interested in D&D, worldbuilding, and character-focused narratives.',
-  keywords: [
-    'fantasy comic',
-    'D&D',
-    'worldbuilding',
-    'character-focused narratives',
-    '16+',
-    'Hell Versus You',
-  ],
-  openGraph: mergeOpenGraph(),
-  twitter: {
-    card: 'summary_large_image',
-    creator: '@payloadcms',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const siteSettings = await getCachedSiteSettings()()
+  const siteTitle = getSiteTitle(siteSettings)
+  const faviconURL = getSiteFaviconURL(siteSettings)
+
+  return {
+    metadataBase: new URL(getServerSideURL()),
+    title: buildTabTitle(siteTitle),
+    description:
+      'Fantasy comic for ages 16+, built for readers interested in D&D, worldbuilding, and character-focused narratives.',
+    keywords: ['fantasy comic', 'D&D', 'worldbuilding', 'character-focused narratives', '16+', siteTitle],
+    openGraph: mergeOpenGraph({
+      siteName: siteTitle,
+      title: siteTitle,
+    }),
+    twitter: {
+      card: 'summary_large_image',
+      creator: '@payloadcms',
+    },
+    ...(faviconURL ? { icons: { icon: [{ url: faviconURL }] } } : {}),
+  }
 }

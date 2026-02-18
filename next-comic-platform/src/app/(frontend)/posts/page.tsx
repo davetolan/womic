@@ -7,6 +7,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
+import { buildTabTitle, getCachedSiteSettings, getSiteTitle } from '@/utilities/siteSettings'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -56,8 +57,11 @@ export default async function Page() {
   )
 }
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata(): Promise<Metadata> {
+  const siteSettings = await getCachedSiteSettings()()
+  const siteTitle = getSiteTitle(siteSettings)
+
   return {
-    title: `Hell Versus You Posts`,
+    title: buildTabTitle(siteTitle, 'Posts'),
   }
 }

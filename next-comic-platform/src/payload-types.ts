@@ -122,10 +122,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'site-settings': SiteSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
   user: User;
@@ -2251,6 +2253,23 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  /**
+   * Default site title used in browser tabs and metadata.
+   */
+  siteTitle: string;
+  /**
+   * Optional favicon from Media. Recommended: square PNG/WebP/SVG at 64x64 or 128x128.
+   */
+  favicon?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2382,6 +2401,17 @@ export interface FooterSelect<T extends boolean = true> {
               id?: T;
             };
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteTitle?: T;
+  favicon?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

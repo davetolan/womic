@@ -8,6 +8,7 @@ import { Search } from '@/search/Component'
 import PageClient from './page.client'
 import { Media } from '@/components/Media'
 import type { Search as SearchResult } from '@/payload-types'
+import { buildTabTitle, getCachedSiteSettings, getSiteTitle } from '@/utilities/siteSettings'
 
 type Args = {
   searchParams: Promise<{
@@ -121,8 +122,11 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
   )
 }
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata(): Promise<Metadata> {
+  const siteSettings = await getCachedSiteSettings()()
+  const siteTitle = getSiteTitle(siteSettings)
+
   return {
-    title: `Hell Versus You Search`,
+    title: buildTabTitle(siteTitle, 'Search'),
   }
 }

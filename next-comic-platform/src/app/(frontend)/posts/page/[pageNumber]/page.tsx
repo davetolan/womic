@@ -8,6 +8,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
+import { buildTabTitle, getCachedSiteSettings, getSiteTitle } from '@/utilities/siteSettings'
 
 export const revalidate = 600
 
@@ -64,8 +65,11 @@ export default async function Page({ params: paramsPromise }: Args) {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { pageNumber } = await paramsPromise
+  const siteSettings = await getCachedSiteSettings()()
+  const siteTitle = getSiteTitle(siteSettings)
+
   return {
-    title: `Hell Versus You Posts Page ${pageNumber || ''}`,
+    title: buildTabTitle(siteTitle, `Posts Page ${pageNumber || ''}`.trim()),
   }
 }
 

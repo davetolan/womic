@@ -46,7 +46,21 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
             : `/${reference.value.slug}`
       : url
 
-  if (!href) return null
+  const normalizedHref =
+    typeof href === 'string'
+      ? href.startsWith('/') ||
+        href.startsWith('#') ||
+        href.startsWith('http://') ||
+        href.startsWith('https://') ||
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:')
+        ? href
+        : /^localhost(?::\d+)?(\/.*)?$/i.test(href)
+          ? `http://${href}`
+          : `/${href.replace(/^\/+/, '')}`
+      : href
+
+  if (!normalizedHref) return null
 
   const size = appearance === 'link' ? 'clear' : sizeFromProps
   const newTabProps = newTab ? { rel: 'noopener noreferrer', target: '_blank' } : {}
@@ -54,7 +68,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
   /* Ensure we don't break any styles set by richText */
   if (appearance === 'inline') {
     return (
-      <Link className={cn(className)} href={href || url || ''} style={style} {...newTabProps}>
+      <Link className={cn(className)} href={normalizedHref} style={style} {...newTabProps}>
         {label && label}
         {children && children}
       </Link>
@@ -63,7 +77,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
 
   return (
     <Button asChild className={className} size={size} variant={appearance}>
-      <Link className={cn(className)} href={href || url || ''} style={style} {...newTabProps}>
+      <Link className={cn(className)} href={normalizedHref} style={style} {...newTabProps}>
         {label && label}
         {children && children}
       </Link>
