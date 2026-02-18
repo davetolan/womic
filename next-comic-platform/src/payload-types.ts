@@ -405,7 +405,42 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
+    /**
+     * Select from Media. Recommended: High Impact 2400x1400px+, Medium Impact 1600x1000px+, JPG/WebP under 800KB.
+     */
     media?: (number | null) | Media;
+    style?: {
+      containerWidth?: ('default' | 'wide') | null;
+      contentAlignment?: ('left' | 'center') | null;
+      contentWidth?: ('narrow' | 'default' | 'wide') | null;
+      verticalPadding?: ('compact' | 'default' | 'spacious') | null;
+      mediaHeight?: ('short' | 'default' | 'tall' | 'full') | null;
+      mediaFit?: ('cover' | 'contain') | null;
+      mediaPosition?: ('center' | 'top' | 'bottom' | 'left' | 'right') | null;
+      showOverlay?: boolean | null;
+      /**
+       * Overlay darkness percentage for high impact hero.
+       */
+      overlayOpacity?: number | null;
+    };
+    colors?: {
+      /**
+       * Hero background color (hex, rgb, hsl, or CSS color name).
+       */
+      backgroundColor?: string | null;
+      /**
+       * Hero text color.
+       */
+      textColor?: string | null;
+      /**
+       * Hero link/button text color.
+       */
+      linkColor?: string | null;
+      /**
+       * Overlay color for high impact hero.
+       */
+      overlayColor?: string | null;
+    };
   };
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
   meta?: {
@@ -1447,6 +1482,27 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
+        style?:
+          | T
+          | {
+              containerWidth?: T;
+              contentAlignment?: T;
+              contentWidth?: T;
+              verticalPadding?: T;
+              mediaHeight?: T;
+              mediaFit?: T;
+              mediaPosition?: T;
+              showOverlay?: T;
+              overlayOpacity?: T;
+            };
+        colors?:
+          | T
+          | {
+              backgroundColor?: T;
+              textColor?: T;
+              linkColor?: T;
+              overlayColor?: T;
+            };
       };
   layout?:
     | T

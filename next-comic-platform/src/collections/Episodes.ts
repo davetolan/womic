@@ -2,6 +2,84 @@ import type { CollectionConfig } from 'payload'
 import { slugify } from '@/lib/slugify'
 import { revalidateEpisode, revalidateEpisodeDelete } from './Episodes/hooks/revalidateEpisode'
 
+type EpisodePageRow = {
+  altText?: string | null
+  image?: number | string | { id?: number | string; alt?: string | null } | null
+}
+
+const populatePageAltTextFromMedia = async <
+  TData extends {
+    pages?: EpisodePageRow[] | null
+  } | null,
+>(
+  data: TData,
+  payload: {
+    findByID: (args: { collection: 'media'; id: number | string; depth?: number }) => Promise<{
+      alt?: string | null
+    }>
+  },
+): Promise<TData> => {
+  if (!data || !Array.isArray(data.pages) || data.pages.length === 0) {
+    return data
+  }
+
+  const mediaAltByID = new Map<number | string, string>()
+
+  const pages = await Promise.all(
+    data.pages.map(async (page) => {
+      if (!page || typeof page !== 'object') {
+        return page
+      }
+
+      if (typeof page.altText === 'string' && page.altText.trim().length > 0) {
+        return page
+      }
+
+      const image = page.image
+      if (!image) {
+        return page
+      }
+
+      if (typeof image === 'object') {
+        const mediaAlt = typeof image.alt === 'string' ? image.alt.trim() : ''
+        if (mediaAlt) {
+          return { ...page, altText: mediaAlt }
+        }
+      }
+
+      const mediaID =
+        typeof image === 'object'
+          ? image?.id
+          : typeof image === 'number' || typeof image === 'string'
+            ? image
+            : undefined
+
+      if (mediaID === undefined || mediaID === null || mediaID === '') {
+        return page
+      }
+
+      let mediaAlt = mediaAltByID.get(mediaID)
+      if (mediaAlt === undefined) {
+        const mediaDoc = await payload.findByID({
+          collection: 'media',
+          id: mediaID,
+          depth: 0,
+        })
+        mediaAlt = typeof mediaDoc?.alt === 'string' ? mediaDoc.alt.trim() : ''
+        mediaAltByID.set(mediaID, mediaAlt)
+      }
+
+      if (!mediaAlt) {
+        return page
+      }
+
+      return { ...page, altText: mediaAlt }
+    }),
+  )
+
+  return { ...data, pages }
+}
+
 export const Episodes: CollectionConfig = {
   slug: 'episodes',
   defaultSort: 'episodeNumber',
@@ -147,7 +225,7 @@ export const Episodes: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [
-      ({ data, originalDoc, operation }) => {
+      async ({ data, originalDoc, operation, req }) => {
         if (
           operation === 'update' &&
           originalDoc?.slug &&
@@ -158,18 +236,18 @@ export const Episodes: CollectionConfig = {
           throw new Error('Slug cannot be changed after an episode has been published.')
         }
 
-        return data
+        return populatePageAltTextFromMedia(data, req.payload)
       },
     ],
     beforeValidate: [
-      ({ data }) => {
+      async ({ data, req }) => {
         if (data?.title && !data?.slug) {
           data.slug = slugify(data.title)
         }
         if (data?.title && !data?.seoTitle) {
           data.seoTitle = data.title
         }
-        return data
+        return populatePageAltTextFromMedia(data, req.payload)
       },
     ],
     afterChange: [
