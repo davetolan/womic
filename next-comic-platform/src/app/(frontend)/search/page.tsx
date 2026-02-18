@@ -1,12 +1,13 @@
 import type { Metadata } from 'next/types'
 
-import { CollectionArchive } from '@/components/CollectionArchive'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import Link from 'next/link'
 import React from 'react'
 import { Search } from '@/search/Component'
 import PageClient from './page.client'
-import { CardPostData } from '@/components/Card'
+import { Media } from '@/components/Media'
+import type { Search as SearchResult } from '@/payload-types'
 
 type Args = {
   searchParams: Promise<{
@@ -17,7 +18,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
   const { q: query } = await searchParamsPromise
   const payload = await getPayload({ config: configPromise })
 
-  const posts = await payload.find({
+  const results = await payload.find({
     collection: 'search',
     depth: 1,
     limit: 12,
@@ -72,8 +73,47 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
         </div>
       </div>
 
-      {posts.totalDocs > 0 ? (
-        <CollectionArchive posts={posts.docs as CardPostData[]} />
+      {results.totalDocs > 0 ? (
+        <div className="container">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {(results.docs as SearchResult[]).map((item) => {
+              const relationTo = item.doc?.relationTo
+              const href =
+                relationTo === 'episodes'
+                  ? `/episode/${item.slug}/1`
+                  : relationTo === 'posts'
+                    ? `/posts/${item.slug}`
+                    : null
+
+              if (!href || !item.slug) {
+                return null
+              }
+
+              return (
+                <Link
+                  key={item.id}
+                  href={href}
+                  className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition hover:shadow-md"
+                >
+                  {item.meta?.image && typeof item.meta.image === 'object' ? (
+                    <div className="mb-3 overflow-hidden rounded-lg border border-zinc-200">
+                      <Media resource={item.meta.image} imgClassName="h-40 w-full object-cover" />
+                    </div>
+                  ) : null}
+                  <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                    {relationTo === 'episodes' ? 'Episode' : 'Post'}
+                  </p>
+                  <h2 className="mt-1 text-lg font-semibold text-zinc-900">
+                    {item.meta?.title || item.title || item.slug}
+                  </h2>
+                  {item.meta?.description ? (
+                    <p className="mt-2 line-clamp-3 text-sm text-zinc-700">{item.meta.description}</p>
+                  ) : null}
+                </Link>
+              )
+            })}
+          </div>
+        </div>
       ) : (
         <div className="container">No results found.</div>
       )}

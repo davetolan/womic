@@ -1,10 +1,9 @@
-import configPromise from '@payload-config'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getPayload } from 'payload'
 
 import type { Episode } from '@/payload-types'
 import { buildCloudinaryImageURL, getCloudinaryPublicIdFromMedia } from '@/utilities/cloudinary'
+import { getCachedArchiveEpisodes } from '@/utilities/getEpisodes'
 
 const FALLBACK_THUMBNAIL = '/placeholder-thumbnail.jpg'
 
@@ -54,16 +53,8 @@ const formatDate = (value: string): string => {
 }
 
 export default async function ArchivePage() {
-  const payload = await getPayload({ config: configPromise })
-  const result = await payload.find({
-    collection: 'episodes',
-    depth: 1,
-    limit: 100,
-    sort: '-episodeNumber',
-    pagination: false,
-  })
-
-  const episodes = result.docs.filter((episode) => episode.slug && episode.title)
+  const episodeDocs = await getCachedArchiveEpisodes()()
+  const episodes = episodeDocs.filter((episode) => episode.slug && episode.title)
 
   return (
     <main className="min-h-screen bg-zinc-50 px-4 py-10 text-zinc-900 sm:px-6 lg:px-8">

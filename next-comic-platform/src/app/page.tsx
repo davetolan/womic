@@ -1,6 +1,7 @@
 import configPromise from '@payload-config';
 import Image from 'next/image';
 import Link from 'next/link';
+import { unstable_noStore as noStore } from 'next/cache';
 import { getPayload } from 'payload';
 
 import { NewsletterSignupForm } from '@/components/NewsletterSignupForm';
@@ -16,14 +17,6 @@ type EpisodePreview = {
   episodeNumber: number;
   publishDate: string;
   thumbnail: string;
-};
-
-const FALLBACK_EPISODE: EpisodePreview = {
-  title: 'The Awakening',
-  slug: 'the-awakening',
-  episodeNumber: 1,
-  publishDate: '2026-01-01',
-  thumbnail: '/placeholder-thumbnail.jpg',
 };
 
 function getThumbnailURL(episode: Episode): string {
@@ -87,7 +80,7 @@ function formatDate(dateString: string): string {
   });
 }
 
-async function getLatestEpisode(): Promise<EpisodePreview> {
+async function getLatestEpisode(): Promise<EpisodePreview | null> {
   try {
     const payload = await getPayload({ config: configPromise });
     const result = await payload.find({
@@ -95,18 +88,20 @@ async function getLatestEpisode(): Promise<EpisodePreview> {
       limit: 1,
       sort: '-episodeNumber',
       depth: 1,
+      pagination: false,
     });
-
-    return mapEpisodeToPreview(result.docs[0]) ?? FALLBACK_EPISODE;
+    const latestEpisode = result.docs[0];
+    return mapEpisodeToPreview(latestEpisode);
   } catch (error) {
     console.error('Failed to load latest episode from Payload:', error);
-    return FALLBACK_EPISODE;
+    return null;
   }
 }
 
 export default async function Home() {
+  noStore();
   const latestEpisode = await getLatestEpisode();
-  const formattedPublishDate = formatDate(latestEpisode.publishDate);
+  const formattedPublishDate = latestEpisode ? formatDate(latestEpisode.publishDate) : null;
 
   return (
     <Providers>
@@ -139,12 +134,14 @@ export default async function Home() {
                 panel counts).
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <Link
-                  href={`/episode/${latestEpisode.slug}/1`}
-                  className="inline-flex items-center justify-center rounded-lg bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-zinc-700"
-                >
-                  Read Latest Episode
-                </Link>
+                {latestEpisode ? (
+                  <Link
+                    href={`/episode/${latestEpisode.slug}/1`}
+                    className="inline-flex items-center justify-center rounded-lg bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-zinc-700"
+                  >
+                    Read Latest Episode
+                  </Link>
+                ) : null}
                 <Link
                   href="/archive"
                   className="inline-flex items-center justify-center rounded-lg border border-zinc-300 bg-white px-5 py-3 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-100"
@@ -161,31 +158,35 @@ export default async function Home() {
               <h2 id="latest-episode-heading" className="text-2xl font-semibold tracking-tight">
                 Latest Episode
               </h2>
-              <article className="mt-6 grid gap-5 md:grid-cols-[220px_1fr] md:items-start">
-                <div className="overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
-                  <Image
-                    src={latestEpisode.thumbnail}
-                    alt={`${latestEpisode.title} thumbnail`}
-                    width={440}
-                    height={620}
-                    className="h-auto w-full object-cover"
-                    priority
-                  />
-                </div>
-                <div className="flex flex-col gap-3">
-                  <p className="text-sm font-medium text-zinc-600">Episode {latestEpisode.episodeNumber}</p>
-                  <h3 className="text-xl font-semibold">{latestEpisode.title}</h3>
-                  <p className="text-sm text-zinc-700">Published {formattedPublishDate}</p>
-                  <div className="pt-2">
-                    <Link
-                      href={`/episode/${latestEpisode.slug}/1`}
-                      className="inline-flex items-center justify-center rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-700"
-                    >
-                      Start Reading
-                    </Link>
+              {latestEpisode ? (
+                <article className="mt-6 grid gap-5 md:grid-cols-[220px_1fr] md:items-start">
+                  <div className="overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
+                    <Image
+                      src={latestEpisode.thumbnail}
+                      alt={`${latestEpisode.title} thumbnail`}
+                      width={440}
+                      height={620}
+                      className="h-auto w-full object-cover"
+                      priority
+                    />
                   </div>
-                </div>
-              </article>
+                  <div className="flex flex-col gap-3">
+                    <p className="text-sm font-medium text-zinc-600">Episode {latestEpisode.episodeNumber}</p>
+                    <h3 className="text-xl font-semibold">{latestEpisode.title}</h3>
+                    <p className="text-sm text-zinc-700">Published {formattedPublishDate}</p>
+                    <div className="pt-2">
+                      <Link
+                        href={`/episode/${latestEpisode.slug}/1`}
+                        className="inline-flex items-center justify-center rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-700"
+                      >
+                        Start Reading
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              ) : (
+                <p className="mt-4 text-sm text-zinc-700">No episodes published yet.</p>
+              )}
             </section>
 
             <section

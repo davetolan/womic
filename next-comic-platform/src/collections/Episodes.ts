@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { slugify } from '@/lib/slugify'
+import { revalidateEpisode, revalidateEpisodeDelete } from './Episodes/hooks/revalidateEpisode'
 
 export const Episodes: CollectionConfig = {
   slug: 'episodes',
@@ -212,7 +213,9 @@ export const Episodes: CollectionConfig = {
 
         return doc
       },
+      revalidateEpisode,
     ],
+    afterDelete: [revalidateEpisodeDelete],
   },
   versions: {
     drafts: {

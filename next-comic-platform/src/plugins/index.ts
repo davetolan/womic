@@ -1,5 +1,6 @@
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
+import { searchPlugin } from '@payloadcms/plugin-search'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { cloudinaryStorage } from 'payload-cloudinary'
 import { Plugin } from 'payload'
@@ -8,6 +9,8 @@ import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { getServerSideURL } from '@/utilities/getURL'
 import { Media } from '@/collections/Media'
+import { beforeSyncWithSearch } from '@/search/beforeSync'
+import { searchFields } from '@/search/fieldOverrides'
 
 type SeoDoc = {
   title?: string | null
@@ -54,6 +57,15 @@ export const plugins: Plugin[] = [
       },
       hooks: {
         afterChange: [revalidateRedirects],
+      },
+    },
+  }),
+  searchPlugin({
+    collections: ['posts', 'episodes'],
+    beforeSync: beforeSyncWithSearch,
+    searchOverrides: {
+      fields: ({ defaultFields }) => {
+        return [...defaultFields, ...searchFields]
       },
     },
   }),

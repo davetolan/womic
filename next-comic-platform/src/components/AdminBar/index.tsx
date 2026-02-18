@@ -47,6 +47,11 @@ export const AdminBar: React.FC<{
     setShow(Boolean(user?.id))
   }, [])
 
+  // The search page does server-side querying and should not be blocked by admin-bar auth checks.
+  if (pathname === '/search') {
+    return null
+  }
+
   return (
     <div
       className={cn(baseClass, 'py-2 bg-black text-white', {
