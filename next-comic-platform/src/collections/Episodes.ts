@@ -130,7 +130,6 @@ export const Episodes: CollectionConfig = {
       name: 'chapter',
       type: 'relationship',
       relationTo: 'chapters',
-      required: true,
       admin: { position: 'sidebar' },
     },
 
