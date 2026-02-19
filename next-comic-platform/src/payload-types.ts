@@ -166,7 +166,13 @@ export interface UserAuthOperations {
  */
 export interface Media {
   id: number;
+  /**
+   * Describe what is in the image for screen readers. Keep it short and specific (for example: "Hero raises a sword in front of a burning gate"). Leave blank only if the image is decorative.
+   */
   alt?: string | null;
+  /**
+   * Optional visible caption shown with the image on the site.
+   */
   caption?: {
     root: {
       type: string;
@@ -363,7 +369,13 @@ export interface Page {
   id: number;
   title: string;
   hero: {
+    /**
+     * Choose the hero style: None hides the hero. High Impact is a full-screen cinematic banner. Medium Impact shows text with a supporting image. Low Impact is a simple text intro.
+     */
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    /**
+     * Main headline and intro text shown in the hero.
+     */
     richText?: {
       root: {
         type: string;
@@ -379,11 +391,23 @@ export interface Page {
       };
       [k: string]: unknown;
     } | null;
+    /**
+     * Optional buttons/links shown in the hero (for example: Read Now, Archive).
+     */
     links?:
       | {
           link: {
+            /**
+             * Internal link = choose content in this CMS. Custom URL = paste a full web address or a path like /archive.
+             */
             type?: ('reference' | 'custom') | null;
+            /**
+             * Turn on for external links you want to open in a new tab.
+             */
             newTab?: boolean | null;
+            /**
+             * Pick a page, chapter, or episode from this site.
+             */
             reference?:
               | ({
                   relationTo: 'pages';
@@ -397,6 +421,9 @@ export interface Page {
                   relationTo: 'chapters';
                   value: number | Chapter;
                 } | null);
+            /**
+             * Examples: /archive, https://example.com, mailto:hello@example.com
+             */
             url?: string | null;
             label: string;
             /**
@@ -412,13 +439,22 @@ export interface Page {
      */
     media?: (number | null) | Media;
     style?: {
+      /**
+       * Controls how wide the hero content area is.
+       */
       containerWidth?: ('default' | 'wide') | null;
+      /**
+       * Align hero text and buttons to the left or center.
+       */
       contentAlignment?: ('left' | 'center') | null;
       contentWidth?: ('narrow' | 'default' | 'wide') | null;
       verticalPadding?: ('compact' | 'default' | 'spacious') | null;
       mediaHeight?: ('short' | 'default' | 'tall' | 'full') | null;
       mediaFit?: ('cover' | 'contain') | null;
       mediaPosition?: ('center' | 'top' | 'bottom' | 'left' | 'right') | null;
+      /**
+       * Adds a dark layer over the background image to improve text readability.
+       */
       showOverlay?: boolean | null;
       /**
        * Overlay darkness percentage for high impact hero.
@@ -484,15 +520,21 @@ export interface Episode {
    * Optional: mark this as the recommended entry point for new readers.
    */
   startHere?: boolean | null;
+  /**
+   * Recommended thumbnail: 900x1200px (3:4 portrait), JPG/WebP, under 500KB.
+   */
   thumbnail?: (number | null) | Media;
   /**
    * Pages are read in this order. Drag and drop rows to reorder.
    */
   pages: {
     /**
-     * Upload the page image for this page index.
+     * Choose the comic page image for this page number.
      */
     image: number | Media;
+    /**
+     * Accessibility text that describes this page image. If left empty, it auto-fills from the selected Media alt text.
+     */
     altText?: string | null;
     /**
      * Optional short title for this page.
@@ -567,8 +609,17 @@ export interface CallToActionBlock {
   links?:
     | {
         link: {
+          /**
+           * Internal link = choose content in this CMS. Custom URL = paste a full web address or a path like /archive.
+           */
           type?: ('reference' | 'custom') | null;
+          /**
+           * Turn on for external links you want to open in a new tab.
+           */
           newTab?: boolean | null;
+          /**
+           * Pick a page, chapter, or episode from this site.
+           */
           reference?:
             | ({
                 relationTo: 'pages';
@@ -582,6 +633,9 @@ export interface CallToActionBlock {
                 relationTo: 'chapters';
                 value: number | Chapter;
               } | null);
+          /**
+           * Examples: /archive, https://example.com, mailto:hello@example.com
+           */
           url?: string | null;
           label: string;
           /**
@@ -621,8 +675,17 @@ export interface ContentBlock {
         } | null;
         enableLink?: boolean | null;
         link?: {
+          /**
+           * Internal link = choose content in this CMS. Custom URL = paste a full web address or a path like /archive.
+           */
           type?: ('reference' | 'custom') | null;
+          /**
+           * Turn on for external links you want to open in a new tab.
+           */
           newTab?: boolean | null;
+          /**
+           * Pick a page, chapter, or episode from this site.
+           */
           reference?:
             | ({
                 relationTo: 'pages';
@@ -636,6 +699,9 @@ export interface ContentBlock {
                 relationTo: 'chapters';
                 value: number | Chapter;
               } | null);
+          /**
+           * Examples: /archive, https://example.com, mailto:hello@example.com
+           */
           url?: string | null;
           label: string;
           /**
@@ -2088,8 +2154,17 @@ export interface Header {
   navItems?:
     | {
         link: {
+          /**
+           * Internal link = choose content in this CMS. Custom URL = paste a full web address or a path like /archive.
+           */
           type?: ('reference' | 'custom') | null;
+          /**
+           * Turn on for external links you want to open in a new tab.
+           */
           newTab?: boolean | null;
+          /**
+           * Pick a page, chapter, or episode from this site.
+           */
           reference?:
             | ({
                 relationTo: 'pages';
@@ -2103,6 +2178,9 @@ export interface Header {
                 relationTo: 'chapters';
                 value: number | Chapter;
               } | null);
+          /**
+           * Examples: /archive, https://example.com, mailto:hello@example.com
+           */
           url?: string | null;
           label: string;
         };
@@ -2115,8 +2193,17 @@ export interface Header {
   ctaLink: {
     enabled?: boolean | null;
     link: {
+      /**
+       * Internal link = choose content in this CMS. Custom URL = paste a full web address or a path like /archive.
+       */
       type?: ('reference' | 'custom') | null;
+      /**
+       * Turn on for external links you want to open in a new tab.
+       */
       newTab?: boolean | null;
+      /**
+       * Pick a page, chapter, or episode from this site.
+       */
       reference?:
         | ({
             relationTo: 'pages';
@@ -2130,6 +2217,9 @@ export interface Header {
             relationTo: 'chapters';
             value: number | Chapter;
           } | null);
+      /**
+       * Examples: /archive, https://example.com, mailto:hello@example.com
+       */
       url?: string | null;
       label: string;
       /**
@@ -2192,8 +2282,17 @@ export interface Footer {
   navItems?:
     | {
         link: {
+          /**
+           * Internal link = choose content in this CMS. Custom URL = paste a full web address or a path like /archive.
+           */
           type?: ('reference' | 'custom') | null;
+          /**
+           * Turn on for external links you want to open in a new tab.
+           */
           newTab?: boolean | null;
+          /**
+           * Pick a page, chapter, or episode from this site.
+           */
           reference?:
             | ({
                 relationTo: 'pages';
@@ -2207,6 +2306,9 @@ export interface Footer {
                 relationTo: 'chapters';
                 value: number | Chapter;
               } | null);
+          /**
+           * Examples: /archive, https://example.com, mailto:hello@example.com
+           */
           url?: string | null;
           label: string;
         };
@@ -2226,8 +2328,17 @@ export interface Footer {
     legalLinks?:
       | {
           link: {
+            /**
+             * Internal link = choose content in this CMS. Custom URL = paste a full web address or a path like /archive.
+             */
             type?: ('reference' | 'custom') | null;
+            /**
+             * Turn on for external links you want to open in a new tab.
+             */
             newTab?: boolean | null;
+            /**
+             * Pick a page, chapter, or episode from this site.
+             */
             reference?:
               | ({
                   relationTo: 'pages';
@@ -2241,6 +2352,9 @@ export interface Footer {
                   relationTo: 'chapters';
                   value: number | Chapter;
                 } | null);
+            /**
+             * Examples: /archive, https://example.com, mailto:hello@example.com
+             */
             url?: string | null;
             label: string;
           };
