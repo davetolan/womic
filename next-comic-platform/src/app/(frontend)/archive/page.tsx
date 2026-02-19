@@ -6,6 +6,7 @@ import { buildCloudinaryImageURL, getCloudinaryPublicIdFromMedia } from '@/utili
 import { getCachedArchiveEpisodes } from '@/utilities/getEpisodes'
 
 const FALLBACK_THUMBNAIL = '/placeholder-thumbnail.jpg'
+export const dynamic = 'force-dynamic'
 
 const getThumbnailURL = (episode: Episode): string => {
   const thumbnailSource =
@@ -53,7 +54,14 @@ const formatDate = (value: string): string => {
 }
 
 export default async function ArchivePage() {
-  const episodeDocs = await getCachedArchiveEpisodes()()
+  let episodeDocs: Episode[] = []
+
+  try {
+    episodeDocs = await getCachedArchiveEpisodes()()
+  } catch (error) {
+    console.error('[archive/page] Failed to fetch episodes. Rendering empty archive.', error)
+  }
+
   const episodes = episodeDocs.filter((episode) => episode.slug && episode.title)
 
   return (
