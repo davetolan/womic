@@ -38,6 +38,8 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
             admin: {
               layout: 'horizontal',
               width: '50%',
+              description:
+                'Internal link = choose content in this CMS. Custom URL = paste a full web address or a path like /archive.',
             },
             defaultValue: 'reference',
             options: [
@@ -59,6 +61,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
                 alignSelf: 'flex-end',
               },
               width: '50%',
+              description: 'Turn on for external links you want to open in a new tab.',
             },
             label: 'Open in new tab',
           },
@@ -73,6 +76,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
       type: 'relationship',
       admin: {
         condition: (_, siblingData) => siblingData?.type === 'reference',
+        description: 'Pick a page, chapter, or episode from this site.',
       },
       label: 'Document to link to',
       relationTo: ['pages', 'episodes', 'chapters'],
@@ -83,6 +87,8 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
       type: 'text',
       admin: {
         condition: (_, siblingData) => siblingData?.type === 'custom',
+        description:
+          'Examples: /archive, https://example.com, mailto:hello@example.com',
       },
       label: 'Custom URL',
       required: true,

@@ -30,11 +30,17 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      //required: true,
+      admin: {
+        description:
+          'Describe what is in the image for screen readers. Keep it short and specific (for example: "Hero raises a sword in front of a burning gate"). Leave blank only if the image is decorative.',
+      },
     },
     {
       name: 'caption',
       type: 'richText',
+      admin: {
+        description: 'Optional visible caption shown with the image on the site.',
+      },
       editor: lexicalEditor({
         features: ({ rootFeatures }) => {
           return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]

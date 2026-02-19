@@ -158,6 +158,10 @@ export const Episodes: CollectionConfig = {
       name: 'thumbnail',
       type: 'upload',
       relationTo: 'media',
+      admin: {
+        description:
+          'Recommended thumbnail: 900x1200px (3:4 portrait), JPG/WebP, under 500KB.',
+      },
     },
 
     {
@@ -182,10 +186,17 @@ export const Episodes: CollectionConfig = {
           relationTo: 'media',
           required: true,
           admin: {
-            description: 'Upload the page image for this page index.',
+            description: 'Choose the comic page image for this page number.',
           },
         },
-        { name: 'altText', type: 'text' },
+        {
+          name: 'altText',
+          type: 'text',
+          admin: {
+            description:
+              'Accessibility text that describes this page image. If left empty, it auto-fills from the selected Media alt text.',
+          },
+        },
         {
           name: 'pageTitle',
           type: 'text',

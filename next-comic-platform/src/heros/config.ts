@@ -18,6 +18,10 @@ export const hero: Field = {
       type: 'select',
       defaultValue: 'lowImpact',
       label: 'Type',
+      admin: {
+        description:
+          'Choose the hero style: None hides the hero. High Impact is a full-screen cinematic banner. Medium Impact shows text with a supporting image. Low Impact is a simple text intro.',
+      },
       options: [
         {
           label: 'None',
@@ -52,10 +56,17 @@ export const hero: Field = {
         },
       }),
       label: false,
+      admin: {
+        description: 'Main headline and intro text shown in the hero.',
+      },
     },
     linkGroup({
       overrides: {
         maxRows: 2,
+        admin: {
+          description: 'Optional buttons/links shown in the hero (for example: Read Now, Archive).',
+          initCollapsed: true,
+        },
       },
     }),
     {
@@ -77,6 +88,9 @@ export const hero: Field = {
           name: 'containerWidth',
           type: 'select',
           defaultValue: 'default',
+          admin: {
+            description: 'Controls how wide the hero content area is.',
+          },
           options: [
             { label: 'Default', value: 'default' },
             { label: 'Wide', value: 'wide' },
@@ -86,6 +100,9 @@ export const hero: Field = {
           name: 'contentAlignment',
           type: 'select',
           defaultValue: 'left',
+          admin: {
+            description: 'Align hero text and buttons to the left or center.',
+          },
           options: [
             { label: 'Left', value: 'left' },
             { label: 'Center', value: 'center' },
@@ -158,6 +175,7 @@ export const hero: Field = {
           defaultValue: true,
           admin: {
             condition: (_, { type } = {}) => type === 'highImpact',
+            description: 'Adds a dark layer over the background image to improve text readability.',
           },
         },
         {
