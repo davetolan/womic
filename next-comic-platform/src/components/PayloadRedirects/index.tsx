@@ -1,5 +1,5 @@
 import type React from 'react'
-import type { Page, Post } from '@/payload-types'
+import type { Chapter, Episode } from '@/payload-types'
 
 import { getCachedDocument } from '@/utilities/getDocument'
 import { getCachedRedirects } from '@/utilities/getRedirects'
@@ -27,16 +27,25 @@ export const PayloadRedirects: React.FC<Props> = async ({ disableNotFound, url }
       const collection = redirectItem.to?.reference?.relationTo
       const id = redirectItem.to?.reference?.value
 
-      const document = (await getCachedDocument(collection, id)()) as Page | Post
-      redirectUrl = `${redirectItem.to?.reference?.relationTo !== 'pages' ? `/${redirectItem.to?.reference?.relationTo}` : ''}/${
-        document?.slug
-      }`
+      const document = (await getCachedDocument(collection, id)()) as Chapter | Episode
+      redirectUrl =
+        collection === 'episodes'
+          ? `/episode/${document?.slug || ''}/1`
+          : collection === 'chapters'
+            ? `/chapter/${document?.slug || ''}`
+            : ''
     } else {
-      redirectUrl = `${redirectItem.to?.reference?.relationTo !== 'pages' ? `/${redirectItem.to?.reference?.relationTo}` : ''}/${
+      const collection = redirectItem.to?.reference?.relationTo
+      const slug =
         typeof redirectItem.to?.reference?.value === 'object'
           ? redirectItem.to?.reference?.value?.slug
           : ''
-      }`
+      redirectUrl =
+        collection === 'episodes'
+          ? `/episode/${slug || ''}/1`
+          : collection === 'chapters'
+            ? `/chapter/${slug || ''}`
+            : ''
     }
 
     if (redirectUrl) redirect(redirectUrl)

@@ -10,7 +10,7 @@ type EpisodePageRow = {
 const populatePageAltTextFromMedia = async <
   TData extends {
     pages?: EpisodePageRow[] | null
-  } | null,
+  } | null | undefined,
 >(
   data: TData,
   payload: {
@@ -102,7 +102,7 @@ export const Episodes: CollectionConfig = {
       type: 'text',
       required: true,
       unique: true,
-      validate: (value) => {
+      validate: (value: unknown) => {
         if (!value || typeof value !== 'string') {
           return 'Slug is required.'
         }
@@ -116,7 +116,7 @@ export const Episodes: CollectionConfig = {
       type: 'number',
       required: true,
       unique: true,
-      validate: (value) => {
+      validate: (value: unknown) => {
         if (typeof value !== 'number' || !Number.isInteger(value) || value < 1) {
           return 'Episode number must be a whole number greater than 0.'
         }
@@ -165,7 +165,7 @@ export const Episodes: CollectionConfig = {
       type: 'array',
       required: true,
       minRows: 1,
-      validate: (value) => {
+      validate: (value: unknown) => {
         if (!Array.isArray(value) || value.length < 1) {
           return 'At least one page is required.'
         }

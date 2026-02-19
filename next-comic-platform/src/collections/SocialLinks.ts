@@ -52,7 +52,7 @@ export const SocialLinks: CollectionConfig = {
       type: 'text',
       required: true,
       unique: true,
-      validate: (value) => {
+      validate: (value: unknown) => {
         if (!value || typeof value !== 'string') return 'URL is required.'
 
         try {
