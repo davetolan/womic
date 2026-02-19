@@ -513,7 +513,7 @@ export interface Episode {
    * Episode number (used for ordering).
    */
   episodeNumber: number;
-  chapter: number | Chapter;
+  chapter?: (number | null) | Chapter;
   /**
    * Used with draft/published status and optional scheduled publishing.
    */
