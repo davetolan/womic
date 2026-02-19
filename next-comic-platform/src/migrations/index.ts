@@ -1,6 +1,7 @@
 import * as migration_20260219_033523 from './20260219_033523';
 import * as migration_20260219_033706 from './20260219_033706';
 import * as migration_20260219_212528_add_books_hierarchy from './20260219_212528_add_books_hierarchy';
+import * as migration_20260219_235204_add_header_footer_height from './20260219_235204_add_header_footer_height';
 
 export const migrations = [
   {
@@ -17,5 +18,10 @@ export const migrations = [
     up: migration_20260219_212528_add_books_hierarchy.up,
     down: migration_20260219_212528_add_books_hierarchy.down,
     name: '20260219_212528_add_books_hierarchy'
+  },
+  {
+    up: migration_20260219_235204_add_header_footer_height.up,
+    down: migration_20260219_235204_add_header_footer_height.down,
+    name: '20260219_235204_add_header_footer_height'
   },
 ];
