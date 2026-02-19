@@ -10,10 +10,13 @@
   },
   "scripts": {
     "dev": "pnpm --filter next-comic-platform dev",
+    "migrate": "pnpm --filter next-comic-platform payload migrate",
     "build": "pnpm --filter next-comic-platform build",
+    "build:vercel": "pnpm run migrate && pnpm run build",
     "start": "pnpm --filter next-comic-platform start",
     "lint": "pnpm --filter next-comic-platform lint"
   },
+  "packageManager": "pnpm@10.17.1",
   "dependencies": {
     "cloudinary": "^2.9.0"
   }
