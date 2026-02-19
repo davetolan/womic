@@ -1,11 +1,11 @@
 import type { CollectionConfig } from 'payload'
 import { slugify } from '@/lib/slugify'
 
-export const Chapters: CollectionConfig = {
-  slug: 'chapters',
+export const Books: CollectionConfig = {
+  slug: 'books',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['chapterNumber', 'title', 'book', 'updatedAt'],
+    defaultColumns: ['title', 'updatedAt'],
     hideAPIURL: true,
   },
   access: {
@@ -21,19 +21,6 @@ export const Chapters: CollectionConfig = {
       type: 'text',
       required: true,
       unique: true,
-      admin: { position: 'sidebar' },
-    },
-    {
-      name: 'chapterNumber',
-      type: 'number',
-      required: true,
-      admin: { position: 'sidebar' },
-    },
-    {
-      name: 'book',
-      type: 'relationship',
-      relationTo: 'books',
-      required: true,
       admin: { position: 'sidebar' },
     },
     {

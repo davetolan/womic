@@ -71,6 +71,7 @@ export interface Config {
     categories: Category;
     pages: Page;
     posts: Post;
+    books: Book;
     chapters: Chapter;
     episodes: Episode;
     'newsletter-subscribers': NewsletterSubscriber;
@@ -98,6 +99,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    books: BooksSelect<false> | BooksSelect<true>;
     chapters: ChaptersSelect<false> | ChaptersSelect<true>;
     episodes: EpisodesSelect<false> | EpisodesSelect<true>;
     'newsletter-subscribers': NewsletterSubscribersSelect<false> | NewsletterSubscribersSelect<true>;
@@ -511,7 +513,7 @@ export interface Episode {
    * Episode number (used for ordering).
    */
   episodeNumber: number;
-  chapter?: (number | null) | Chapter;
+  chapter: number | Chapter;
   /**
    * Used with draft/published status and optional scheduled publishing.
    */
@@ -582,6 +584,19 @@ export interface Chapter {
   title: string;
   slug: string;
   chapterNumber: number;
+  book: number | Book;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "books".
+ */
+export interface Book {
+  id: number;
+  title: string;
+  slug: string;
   description?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -1315,6 +1330,10 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
+        relationTo: 'books';
+        value: number | Book;
+      } | null)
+    | ({
         relationTo: 'chapters';
         value: number | Chapter;
       } | null)
@@ -1712,12 +1731,24 @@ export interface PostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "books_select".
+ */
+export interface BooksSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "chapters_select".
  */
 export interface ChaptersSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   chapterNumber?: T;
+  book?: T;
   description?: T;
   updatedAt?: T;
   createdAt?: T;

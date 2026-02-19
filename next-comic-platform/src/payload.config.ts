@@ -5,6 +5,7 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { Books } from './collections/Books'
 import { Chapters } from './collections/Chapters'
 import { Episodes } from './collections/Episodes'
 import { Media } from './collections/Media'
@@ -73,6 +74,7 @@ export default buildConfig({
     Categories,
     Pages,
     Posts,
+    Books,
     Chapters,
     Episodes,
     NewsletterSubscribers,
