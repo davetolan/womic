@@ -13,6 +13,7 @@
     "migrate": "pnpm --filter next-comic-platform payload migrate",
     "build": "pnpm --filter next-comic-platform build",
     "build:vercel": "pnpm run migrate && pnpm run build",
+    "build:vercelfresh": "pnpm payload migrate:fresh && pnpm run build",
     "start": "pnpm --filter next-comic-platform start",
     "lint": "pnpm --filter next-comic-platform lint"
   },
