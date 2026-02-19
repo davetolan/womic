@@ -17,6 +17,10 @@
     "lint": "pnpm --filter next-comic-platform lint"
   },
   "packageManager": "pnpm@10.17.1",
+  "engines": {
+    "node": "20.x",
+    "pnpm": "10.x"
+  },
   "dependencies": {
     "cloudinary": "^2.9.0"
   }
