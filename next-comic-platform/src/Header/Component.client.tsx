@@ -41,6 +41,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   const containerWidth = style?.containerWidth || 'default'
   const variant = style?.variant || 'default'
   const ctaLink = data?.ctaLink?.enabled ? data?.ctaLink?.link : null
+  const height = style?.height?.trim()
 
   const logoMedia = brand?.logoMedia
   const logoMediaResource = typeof logoMedia === 'object' && logoMedia !== null ? logoMedia : null
@@ -70,6 +71,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     ...(colors?.backgroundColor ? { backgroundColor: colors.backgroundColor } : {}),
     ...(colors?.textColor ? { color: colors.textColor } : {}),
     ...(showBottomBorder && colors?.borderColor ? { borderColor: colors.borderColor } : {}),
+    ...(height ? { minHeight: height } : {}),
   }
 
   const linkInlineStyle: React.CSSProperties | undefined = colors?.linkColor
@@ -101,7 +103,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       {...(theme ? { 'data-theme': theme } : {})}
     >
       <div className={cn(containerWidth === 'wide' ? 'mx-auto max-w-screen-2xl px-6' : 'container')}>
-        <div className={cn('py-6 flex items-center gap-6', navAlignment === 'left' ? 'justify-start' : 'justify-between')}>
+        <div
+          className={cn('py-6 flex items-center gap-6', navAlignment === 'left' ? 'justify-start' : 'justify-between')}
+          style={height ? { minHeight: '100%' } : undefined}
+        >
           <Link className="flex items-center gap-3 min-w-0" href="/">
             {logoMediaResource ? (
               <Media

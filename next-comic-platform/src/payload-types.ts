@@ -2147,6 +2147,10 @@ export interface Header {
     containerWidth?: ('default' | 'wide') | null;
     navAlignment?: ('right' | 'left') | null;
     showSearch?: boolean | null;
+    /**
+     * Optional header height using any valid CSS size value (for example: 80px, 5rem, clamp(72px, 8vw, 108px)).
+     */
+    height?: string | null;
   };
   colors?: {
     /**
@@ -2283,6 +2287,10 @@ export interface Footer {
   style?: {
     variant?: ('dark' | 'light' | 'minimal') | null;
     showThemeSelector?: boolean | null;
+    /**
+     * Optional footer height using any valid CSS size value (for example: 240px, 18rem, clamp(220px, 30vw, 360px)).
+     */
+    height?: string | null;
   };
   colors?: {
     /**
@@ -2436,6 +2444,7 @@ export interface HeaderSelect<T extends boolean = true> {
         containerWidth?: T;
         navAlignment?: T;
         showSearch?: T;
+        height?: T;
       };
   colors?:
     | T
@@ -2500,6 +2509,7 @@ export interface FooterSelect<T extends boolean = true> {
     | {
         variant?: T;
         showThemeSelector?: T;
+        height?: T;
       };
   colors?:
     | T
