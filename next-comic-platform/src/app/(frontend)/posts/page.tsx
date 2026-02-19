@@ -9,24 +9,31 @@ import React from 'react'
 import PageClient from './page.client'
 import { buildTabTitle, getCachedSiteSettings, getSiteTitle } from '@/utilities/siteSettings'
 
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 export const revalidate = 600
 
 export default async function Page() {
-  const payload = await getPayload({ config: configPromise })
+  let posts: any
 
-  const posts = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 12,
-    overrideAccess: false,
-    select: {
-      title: true,
-      slug: true,
-      categories: true,
-      meta: true,
-    },
-  })
+  try {
+    const payload = await getPayload({ config: configPromise })
+
+    posts = await payload.find({
+      collection: 'posts',
+      depth: 1,
+      limit: 12,
+      overrideAccess: false,
+      select: {
+        title: true,
+        slug: true,
+        categories: true,
+        meta: true,
+      },
+    })
+  } catch (error) {
+    console.error('[posts/page] Failed to fetch posts.', error)
+    posts = { page: 1, totalDocs: 0, totalPages: 0, docs: [] }
+  }
 
   return (
     <div className="pt-24 pb-24">
