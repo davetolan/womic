@@ -351,7 +351,7 @@ export interface FolderInterface {
   createdAt: string;
 }
 /**
- * Organize posts into topics so readers can browse related content.
+ * Organize posts into topics so readers can browse related content. To link to a category in Header/Footer, choose Custom URL and enter /categories/{category-slug}. Replace {category-slug} with this category's slug.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
@@ -790,7 +790,7 @@ export interface ArchiveBlock {
   blockType: 'archive';
 }
 /**
- * Create blog/news posts with rich text blocks, categories, and SEO metadata.
+ * Create blog/news posts with rich text blocks, categories, and SEO metadata. To link to a post from Header/Footer, choose Custom URL and enter /posts/{post-slug} (replace {post-slug} with this post's slug).
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
@@ -802,6 +802,10 @@ export interface Post {
    * Optionally override the site-wide font for this post.
    */
   fontOverride?: ('default' | 'patrickHand' | 'inter' | 'lora' | 'spectral') | null;
+  /**
+   * Choose the post hero style: None hides the hero image area. High Impact is cinematic, Medium is balanced, Low is compact.
+   */
+  impact: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
   heroImage?: (number | null) | Media;
   content: {
     root: {
@@ -819,6 +823,9 @@ export interface Post {
     [k: string]: unknown;
   };
   relatedPosts?: (number | Post)[] | null;
+  /**
+   * Assign categories for organization and archive filtering. Category links use category pages at /categories/{category-slug}.
+   */
   categories?: (number | Category)[] | null;
   meta?: {
     title?: string | null;
@@ -1943,6 +1950,7 @@ export interface NewsletterSignupBlockSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   fontOverride?: T;
+  impact?: T;
   heroImage?: T;
   content?: T;
   relatedPosts?: T;

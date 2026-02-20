@@ -89,6 +89,35 @@ export const Posts: CollectionConfig<'posts'> = {
               },
             },
             {
+              name: 'impact',
+              type: 'select',
+              defaultValue: 'lowImpact',
+              label: 'Hero Impact',
+              admin: {
+                description:
+                  'Choose the post hero style: None hides the hero image area. High Impact is cinematic, Medium is balanced, Low is compact.',
+              },
+              options: [
+                {
+                  label: 'None',
+                  value: 'none',
+                },
+                {
+                  label: 'High Impact',
+                  value: 'highImpact',
+                },
+                {
+                  label: 'Medium Impact',
+                  value: 'mediumImpact',
+                },
+                {
+                  label: 'Low Impact',
+                  value: 'lowImpact',
+                },
+              ],
+              required: true,
+            },
+            {
               name: 'heroImage',
               type: 'upload',
               relationTo: 'media',

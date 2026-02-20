@@ -9,10 +9,71 @@ import { formatAuthors } from '@/utilities/formatAuthors'
 export const PostHero: React.FC<{
   post: Post
 }> = ({ post }) => {
-  const { categories, heroImage, populatedAuthors, publishedAt, title } = post
+  const { categories, heroImage, impact = 'lowImpact', populatedAuthors, publishedAt, title } = post
 
   const hasAuthors =
     populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
+
+  if (impact === 'none') {
+    return (
+      <div className="container pt-12">
+        <div className="max-w-[48rem] mx-auto">
+          <div className="uppercase text-sm mb-4">
+            {categories?.map((category, index) => {
+              if (typeof category === 'object' && category !== null) {
+                const { title: categoryTitle } = category
+
+                const titleToUse = categoryTitle || 'Untitled category'
+
+                const isLast = index === categories.length - 1
+
+                return (
+                  <React.Fragment key={index}>
+                    {titleToUse}
+                    {!isLast && <React.Fragment>, &nbsp;</React.Fragment>}
+                  </React.Fragment>
+                )
+              }
+              return null
+            })}
+          </div>
+
+          <h1 className="mb-6 text-3xl md:text-5xl">{title}</h1>
+
+          <div className="flex flex-col md:flex-row gap-4 md:gap-16">
+            {hasAuthors && (
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm">Author</p>
+
+                  <p>{formatAuthors(populatedAuthors)}</p>
+                </div>
+              </div>
+            )}
+            {publishedAt && (
+              <div className="flex flex-col gap-1">
+                <p className="text-sm">Date Published</p>
+
+                <time dateTime={publishedAt}>{formatDateTime(publishedAt)}</time>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const heroHeightClass = {
+    highImpact: 'min-h-[80vh]',
+    mediumImpact: 'min-h-[60vh]',
+    lowImpact: 'min-h-[42vh]',
+  }[impact]
+
+  const titleSizeClass = {
+    highImpact: 'text-3xl md:text-5xl lg:text-6xl',
+    mediumImpact: 'text-3xl md:text-5xl',
+    lowImpact: 'text-3xl md:text-4xl',
+  }[impact]
 
   return (
     <div className="relative -mt-[10.4rem] flex items-end">
@@ -39,7 +100,7 @@ export const PostHero: React.FC<{
           </div>
 
           <div className="">
-            <h1 className="mb-6 text-3xl md:text-5xl lg:text-6xl">{title}</h1>
+            <h1 className={`mb-6 ${titleSizeClass}`}>{title}</h1>
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 md:gap-16">
@@ -62,7 +123,7 @@ export const PostHero: React.FC<{
           </div>
         </div>
       </div>
-      <div className="min-h-[80vh] select-none">
+      <div className={`${heroHeightClass} select-none`}>
         {heroImage && typeof heroImage !== 'string' && (
           <Media fill priority imgClassName="-z-10 object-cover" resource={heroImage} />
         )}
