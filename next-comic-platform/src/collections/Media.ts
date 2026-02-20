@@ -18,6 +18,7 @@ export const Media: CollectionConfig = {
   slug: 'media',
   admin: {
     hideAPIURL: true,
+    description: 'Upload and manage images/video used across the site (hero images, logos, thumbnails, comic pages).',
   },
   folders: true,
   access: {

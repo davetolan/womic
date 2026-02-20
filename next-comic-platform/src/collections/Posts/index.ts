@@ -49,6 +49,7 @@ export const Posts: CollectionConfig<'posts'> = {
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
+    description: 'Create blog/news posts with rich text blocks, categories, and SEO metadata.',
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({

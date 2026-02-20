@@ -15,6 +15,7 @@ export const Users: CollectionConfig = {
     defaultColumns: ['name', 'email'],
     useAsTitle: 'name',
     hideAPIURL: true,
+    description: 'Admin user accounts with access to edit site content.',
   },
   auth: true,
   fields: [

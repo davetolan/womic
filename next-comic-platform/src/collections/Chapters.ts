@@ -7,6 +7,7 @@ export const Chapters: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['chapterNumber', 'title', 'updatedAt'],
     hideAPIURL: true,
+    description: 'Create chapter groupings for episodes to structure your comic into arcs or books.',
   },
   access: {
     read: () => true,

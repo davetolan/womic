@@ -9,6 +9,7 @@ export const NewsletterSubscribers: CollectionConfig = {
     useAsTitle: 'email',
     defaultColumns: ['email', 'createdAt'],
     hideAPIURL: true,
+    description: 'Stores people who signed up to receive comic update emails.',
   },
   access: {
     create: anyone,

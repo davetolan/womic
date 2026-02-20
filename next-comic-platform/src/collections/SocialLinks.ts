@@ -14,6 +14,7 @@ export const SocialLinks: CollectionConfig = {
     defaultColumns: ['label', 'platform', 'url', 'updatedAt'],
     group: 'Marketing',
     hideAPIURL: true,
+    description: 'Manage social profile links used in the global footer and other social sections.',
   },
   access: {
     create: authenticated,

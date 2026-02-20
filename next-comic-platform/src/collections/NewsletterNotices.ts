@@ -92,6 +92,7 @@ export const NewsletterNotices: CollectionConfig = {
     defaultColumns: ['subject', 'sentAt', 'recipientCount', 'updatedAt'],
     group: 'Marketing',
     hideAPIURL: true,
+    description: 'Create and send announcement emails to all newsletter subscribers.',
   },
   access: {
     create: authenticated,

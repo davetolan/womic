@@ -14,6 +14,7 @@ export const Categories: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
+    description: 'Organize posts into topics so readers can browse related content.',
   },
   fields: [
     {

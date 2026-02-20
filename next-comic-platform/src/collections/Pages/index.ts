@@ -39,6 +39,7 @@ export const Pages: CollectionConfig<'pages'> = {
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
     group: 'Content',
+    description: 'Build website pages like Home, About, or Contact using hero settings and content blocks.',
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({

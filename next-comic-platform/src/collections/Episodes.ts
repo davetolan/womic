@@ -87,6 +87,7 @@ export const Episodes: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['episodeNumber', 'title', 'publishDate', 'updatedAt'],
     hideAPIURL: true,
+    description: 'Publish comic episodes, assign chapters, and manage each episode page sequence.',
   },
   access: {
     read: () => true,
