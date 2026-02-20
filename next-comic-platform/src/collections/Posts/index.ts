@@ -50,7 +50,8 @@ export const Posts: CollectionConfig<'posts'> = {
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    description: 'Create blog/news posts with rich text blocks, categories, and SEO metadata.',
+    description:
+      "Create blog/news posts with rich text blocks, categories, and SEO metadata. To link to a post from Header/Footer, choose Custom URL and enter /posts/{post-slug} (replace {post-slug} with this post's slug).",
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({
@@ -136,6 +137,8 @@ export const Posts: CollectionConfig<'posts'> = {
               type: 'relationship',
               admin: {
                 position: 'sidebar',
+                description:
+                  'Assign categories for organization and archive filtering. Category links only work if your site has a category page. If a category link opens a 404 page, ask your developer to add category pages.',
               },
               hasMany: true,
               relationTo: 'categories',
