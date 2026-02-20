@@ -7,6 +7,7 @@ export const post3: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
   author,
 }) => {
   return {
+    impact: 'highImpact',
     slug: 'dollar-and-sense-the-financial-forecast',
     _status: 'published',
     authors: [author],
