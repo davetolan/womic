@@ -9,6 +9,8 @@ import React, { cache } from 'react'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getCachedSiteSettings } from '@/utilities/siteSettings'
+import { getEffectiveFontClassName, getSiteFont } from '@/utilities/fonts'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
@@ -53,6 +55,8 @@ export default async function Page({ params: paramsPromise }: Args) {
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
+  const siteSettings = await getCachedSiteSettings()()
+  const siteFont = getSiteFont(siteSettings)
   const page: RequiredDataFromCollectionSlug<'pages'> | null = await queryPageBySlug({
     slug: decodedSlug,
   })
@@ -63,8 +67,13 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const { hero, layout } = page
 
+  const pageFontClassName = getEffectiveFontClassName({
+    defaultFont: siteFont,
+    override: page.fontOverride,
+  })
+
   return (
-    <article className="pt-16 pb-24">
+    <article className={`pt-16 pb-24 ${pageFontClassName}`}>
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />

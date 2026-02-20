@@ -15,6 +15,7 @@ import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
+import { fontOverrideOptions } from '@/utilities/fonts'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 
@@ -76,6 +77,15 @@ export const Posts: CollectionConfig<'posts'> = {
       tabs: [
         {
           fields: [
+            {
+              name: 'fontOverride',
+              type: 'select',
+              defaultValue: 'default',
+              options: [...fontOverrideOptions],
+              admin: {
+                description: 'Optionally override the site-wide font for this post.',
+              },
+            },
             {
               name: 'heroImage',
               type: 'upload',
