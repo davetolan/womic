@@ -3,6 +3,7 @@ import * as migration_20260219_033706 from './20260219_033706';
 import * as migration_20260219_212528_add_books_hierarchy from './20260219_212528_add_books_hierarchy';
 import * as migration_20260219_235204_add_header_footer_height from './20260219_235204_add_header_footer_height';
 import * as migration_20260220_000001_add_font_settings from './20260220_000001_add_font_settings';
+import * as migration_20260220_003000_ensure_font_columns from './20260220_003000_ensure_font_columns';
 
 export const migrations = [
   {
@@ -29,5 +30,10 @@ export const migrations = [
     up: migration_20260220_000001_add_font_settings.up,
     down: migration_20260220_000001_add_font_settings.down,
     name: '20260220_000001_add_font_settings'
+  },
+  {
+    up: migration_20260220_003000_ensure_font_columns.up,
+    down: migration_20260220_003000_ensure_font_columns.down,
+    name: '20260220_003000_ensure_font_columns'
   },
 ];
