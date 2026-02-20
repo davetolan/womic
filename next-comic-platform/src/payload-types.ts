@@ -1088,6 +1088,114 @@ export interface NewsletterSignupBlock {
    * Short helper text shown above the signup form.
    */
   description?: string | null;
+  labels?: {
+    /**
+     * Placeholder text inside the email field.
+     */
+    emailPlaceholder?: string | null;
+    /**
+     * Button text before submit.
+     */
+    submitLabel?: string | null;
+    /**
+     * Button text while the request is in progress.
+     */
+    submittingLabel?: string | null;
+    /**
+     * Optional success message override after signup.
+     */
+    successMessage?: string | null;
+    /**
+     * Optional error message override if signup fails.
+     */
+    errorMessage?: string | null;
+  };
+  layout?: {
+    /**
+     * Controls the overall width of the newsletter section.
+     */
+    sectionWidth?: ('default' | 'narrow' | 'wide' | 'full') | null;
+    /**
+     * Align heading and description text.
+     */
+    textAlignment?: ('left' | 'center') | null;
+    /**
+     * Row keeps input and button on one line on larger screens.
+     */
+    formLayout?: ('row' | 'stacked') | null;
+    /**
+     * Inner spacing of the signup card.
+     */
+    padding?: ('compact' | 'default' | 'spacious') | null;
+    /**
+     * Shape style for the card and inputs.
+     */
+    cornerStyle?: ('rounded' | 'pill' | 'square') | null;
+  };
+  /**
+   * Optional background image from Media. Recommended: 1800x900px minimum, JPG/WebP under 800KB.
+   */
+  backgroundMedia?: (number | null) | Media;
+  backgroundStyle?: {
+    /**
+     * Adds a color overlay on top of the background image for readability.
+     */
+    showOverlay?: boolean | null;
+    /**
+     * Overlay color shown above the background image.
+     */
+    overlayColor?: string | null;
+    /**
+     * Overlay opacity percentage.
+     */
+    overlayOpacity?: number | null;
+  };
+  colors?: {
+    /**
+     * Card background color.
+     */
+    cardBackgroundColor?: string | null;
+    /**
+     * Heading and body text color.
+     */
+    textColor?: string | null;
+    /**
+     * Description text color.
+     */
+    mutedTextColor?: string | null;
+    /**
+     * Card border color.
+     */
+    borderColor?: string | null;
+    /**
+     * Email input background color.
+     */
+    inputBackgroundColor?: string | null;
+    /**
+     * Email input text color.
+     */
+    inputTextColor?: string | null;
+    /**
+     * Email input border color.
+     */
+    inputBorderColor?: string | null;
+    /**
+     * Button background color.
+     */
+    buttonBackgroundColor?: string | null;
+    /**
+     * Button text color.
+     */
+    buttonTextColor?: string | null;
+    /**
+     * Success message color.
+     */
+    successColor?: string | null;
+    /**
+     * Error message color.
+     */
+    errorColor?: string | null;
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'newsletterSignup';
@@ -1758,6 +1866,47 @@ export interface FormBlockSelect<T extends boolean = true> {
 export interface NewsletterSignupBlockSelect<T extends boolean = true> {
   heading?: T;
   description?: T;
+  labels?:
+    | T
+    | {
+        emailPlaceholder?: T;
+        submitLabel?: T;
+        submittingLabel?: T;
+        successMessage?: T;
+        errorMessage?: T;
+      };
+  layout?:
+    | T
+    | {
+        sectionWidth?: T;
+        textAlignment?: T;
+        formLayout?: T;
+        padding?: T;
+        cornerStyle?: T;
+      };
+  backgroundMedia?: T;
+  backgroundStyle?:
+    | T
+    | {
+        showOverlay?: T;
+        overlayColor?: T;
+        overlayOpacity?: T;
+      };
+  colors?:
+    | T
+    | {
+        cardBackgroundColor?: T;
+        textColor?: T;
+        mutedTextColor?: T;
+        borderColor?: T;
+        inputBackgroundColor?: T;
+        inputTextColor?: T;
+        inputBorderColor?: T;
+        buttonBackgroundColor?: T;
+        buttonTextColor?: T;
+        successColor?: T;
+        errorColor?: T;
+      };
   id?: T;
   blockName?: T;
 }

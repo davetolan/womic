@@ -5,6 +5,7 @@ import * as migration_20260219_235204_add_header_footer_height from './20260219_
 import * as migration_20260220_000001_add_font_settings from './20260220_000001_add_font_settings';
 import * as migration_20260220_003000_ensure_font_columns from './20260220_003000_ensure_font_columns';
 import * as migration_20260220_030504_add_newsletter_signup_block_tables from './20260220_030504_add_newsletter_signup_block_tables';
+import * as migration_20260220_032111_add_newsletter_signup_customization_fields from './20260220_032111_add_newsletter_signup_customization_fields';
 
 export const migrations = [
   {
@@ -40,6 +41,11 @@ export const migrations = [
   {
     up: migration_20260220_030504_add_newsletter_signup_block_tables.up,
     down: migration_20260220_030504_add_newsletter_signup_block_tables.down,
-    name: '20260220_030504_add_newsletter_signup_block_tables'
+    name: '20260220_030504_add_newsletter_signup_block_tables',
+  },
+  {
+    up: migration_20260220_032111_add_newsletter_signup_customization_fields.up,
+    down: migration_20260220_032111_add_newsletter_signup_customization_fields.down,
+    name: '20260220_032111_add_newsletter_signup_customization_fields'
   },
 ];
