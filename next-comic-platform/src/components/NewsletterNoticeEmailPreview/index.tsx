@@ -1,19 +1,58 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useFormFields } from '@payloadcms/ui'
+
+type MediaReference = {
+  url?: string | null
+}
 
 const resolveImageURL = (image: unknown): string | null => {
   if (!image || typeof image !== 'object') {
     return null
   }
 
-  const imageRecord = image as { url?: unknown }
+  const imageRecord = image as MediaReference
 
   if (typeof imageRecord.url !== 'string' || imageRecord.url.length === 0) {
     return null
   }
 
   return imageRecord.url
+}
+
+const resolveImageID = (image: unknown): number | null => {
+  if (typeof image === 'number') {
+    return image
+  }
+
+  if (typeof image === 'string') {
+    const parsedID = Number(image)
+
+    return Number.isFinite(parsedID) ? parsedID : null
+  }
+
+  if (!image || typeof image !== 'object') {
+    return null
+  }
+
+  const imageRecord = image as { id?: unknown; value?: unknown }
+
+  if (typeof imageRecord.id === 'number') {
+    return imageRecord.id
+  }
+
+  if (typeof imageRecord.value === 'number') {
+    return imageRecord.value
+  }
+
+  if (typeof imageRecord.value === 'string') {
+    const parsedID = Number(imageRecord.value)
+
+    return Number.isFinite(parsedID) ? parsedID : null
+  }
+
+  return null
 }
 
 const getStringValue = (value: unknown, fallback: string): string =>
@@ -30,11 +69,54 @@ export const NewsletterNoticeEmailPreview = () => {
   const buttonTextColor = useFormFields(([fields]) => fields?.['appearance.buttonTextColor']?.value)
   const ctaLabel = useFormFields(([fields]) => fields?.['appearance.ctaLabel']?.value)
 
+  const [resolvedMediaURL, setResolvedMediaURL] = useState<string | null>(null)
+
+  useEffect(() => {
+    const imageURL = resolveImageURL(image)
+
+    if (imageURL) {
+      setResolvedMediaURL(imageURL)
+      return
+    }
+
+    const imageID = resolveImageID(image)
+
+    if (!imageID) {
+      setResolvedMediaURL(null)
+      return
+    }
+
+    let isMounted = true
+
+    const resolveMedia = async () => {
+      const response = await fetch(`/api/media/${imageID}?depth=0`)
+
+      if (!response.ok) {
+        if (isMounted) {
+          setResolvedMediaURL(null)
+        }
+
+        return
+      }
+
+      const media = (await response.json()) as MediaReference
+
+      if (isMounted) {
+        setResolvedMediaURL(resolveImageURL(media))
+      }
+    }
+
+    void resolveMedia()
+
+    return () => {
+      isMounted = false
+    }
+  }, [image])
+
   const resolvedMessage = getStringValue(message, 'Your newsletter message preview will appear here.')
   const resolvedArchivePath = getStringValue(archivePath, '/archive')
   const resolvedSubject = getStringValue(subject, 'Newsletter notice subject')
   const resolvedCtaLabel = getStringValue(ctaLabel, 'Read now')
-  const resolvedImageURL = resolveImageURL(image)
 
   return (
     <div style={{ marginTop: '1.25rem' }}>
@@ -64,11 +146,11 @@ export const NewsletterNoticeEmailPreview = () => {
             padding: '1rem',
           }}
         >
-          {resolvedImageURL ? (
+          {resolvedMediaURL ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               alt="Selected newsletter preview"
-              src={resolvedImageURL}
+              src={resolvedMediaURL}
               style={{
                 display: 'block',
                 width: '100%',
