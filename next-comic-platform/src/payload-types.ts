@@ -163,6 +163,8 @@ export interface UserAuthOperations {
   };
 }
 /**
+ * Upload and manage images/video used across the site (hero images, logos, thumbnails, comic pages).
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -349,6 +351,8 @@ export interface FolderInterface {
   createdAt: string;
 }
 /**
+ * Organize posts into topics so readers can browse related content.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
@@ -364,6 +368,8 @@ export interface Category {
   createdAt: string;
 }
 /**
+ * Build website pages like Home, About, or Contact using hero settings and content blocks.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
@@ -486,7 +492,7 @@ export interface Page {
    * Optionally override the site-wide font for this page.
    */
   fontOverride?: ('default' | 'patrickHand' | 'inter' | 'lora' | 'spectral') | null;
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | NewsletterSignupBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -506,6 +512,8 @@ export interface Page {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Publish comic episodes, assign chapters, and manage each episode page sequence.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "episodes".
  */
@@ -580,6 +588,8 @@ export interface Episode {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Create chapter groupings for episodes to structure your comic into arcs or books.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "chapters".
  */
@@ -780,6 +790,8 @@ export interface ArchiveBlock {
   blockType: 'archive';
 }
 /**
+ * Create blog/news posts with rich text blocks, categories, and SEO metadata.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
@@ -834,6 +846,8 @@ export interface Post {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Admin user accounts with access to edit site content.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
@@ -886,6 +900,8 @@ export interface FormBlock {
   blockType: 'formBlock';
 }
 /**
+ * Create and manage reusable forms that can be placed on pages.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms".
  */
@@ -1061,6 +1077,25 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NewsletterSignupBlock".
+ */
+export interface NewsletterSignupBlock {
+  /**
+   * Section heading shown above the signup form.
+   */
+  heading?: string | null;
+  /**
+   * Short helper text shown above the signup form.
+   */
+  description?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'newsletterSignup';
+}
+/**
+ * Stores people who signed up to receive comic update emails.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "newsletter-subscribers".
  */
 export interface NewsletterSubscriber {
@@ -1070,6 +1105,8 @@ export interface NewsletterSubscriber {
   createdAt: string;
 }
 /**
+ * Create and send announcement emails to all newsletter subscribers.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "newsletter-notices".
  */
@@ -1098,6 +1135,8 @@ export interface NewsletterNotice {
   createdAt: string;
 }
 /**
+ * Manage social profile links used in the global footer and other social sections.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "social-links".
  */
@@ -1127,6 +1166,8 @@ export interface SocialLink {
   createdAt: string;
 }
 /**
+ * Create URL redirects so old links or changed slugs send visitors to the correct current page.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
@@ -1189,6 +1230,8 @@ export interface Search {
   createdAt: string;
 }
 /**
+ * Stores each submitted form entry (for example contact messages) for review in admin.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
@@ -1608,6 +1651,7 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        newsletterSignup?: T | NewsletterSignupBlockSelect<T>;
       };
   meta?:
     | T
@@ -1704,6 +1748,16 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NewsletterSignupBlock_select".
+ */
+export interface NewsletterSignupBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
   id?: T;
   blockName?: T;
 }
@@ -2235,9 +2289,9 @@ export interface Header {
   /**
    * Optional call-to-action button in the header.
    */
-  ctaLink: {
+  ctaLink?: {
     enabled?: boolean | null;
-    link: {
+    link?: {
       /**
        * Internal link = choose content in this CMS. Custom URL = paste a full web address or a path like /archive.
        */

@@ -7,6 +7,7 @@ import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { NewsletterSignup } from '../../blocks/NewsletterSignup/config'
 import { hero } from '@/heros/config'
 import { fontOverrideOptions } from '@/utilities/fonts'
 import { slugField } from 'payload'
@@ -85,7 +86,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, NewsletterSignup],
               required: true,
               admin: {
                 initCollapsed: true,
