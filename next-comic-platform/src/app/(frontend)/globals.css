@@ -11,6 +11,18 @@
 @custom-variant 2xl (@media (width >= theme(--breakpoint-2xl)));
 
 @layer base {
+  .font-theme-patrick-hand {
+    font-family: var(--font-patrick-hand), cursive;
+  }
+
+  .font-theme-inter {
+    font-family: var(--font-inter), sans-serif;
+  }
+
+  .font-theme-lora {
+    font-family: var(--font-lora), serif;
+  }
+
   h1,
   h2,
   h3,

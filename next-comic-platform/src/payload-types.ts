@@ -482,6 +482,10 @@ export interface Page {
       overlayColor?: string | null;
     };
   };
+  /**
+   * Optionally override the site-wide font for this page.
+   */
+  fontOverride?: ('default' | 'patrickHand' | 'inter' | 'lora') | null;
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
   meta?: {
     title?: string | null;
@@ -782,6 +786,10 @@ export interface ArchiveBlock {
 export interface Post {
   id: number;
   title: string;
+  /**
+   * Optionally override the site-wide font for this post.
+   */
+  fontOverride?: ('default' | 'patrickHand' | 'inter' | 'lora') | null;
   heroImage?: (number | null) | Media;
   content: {
     root: {
@@ -1591,6 +1599,7 @@ export interface PagesSelect<T extends boolean = true> {
               overlayColor?: T;
             };
       };
+  fontOverride?: T;
   layout?:
     | T
     | {
@@ -1704,6 +1713,7 @@ export interface FormBlockSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
+  fontOverride?: T;
   heroImage?: T;
   content?: T;
   relatedPosts?: T;
@@ -2418,6 +2428,10 @@ export interface SiteSetting {
    * Optional favicon from Media. Recommended: square PNG/WebP/SVG at 64x64 or 128x128.
    */
   favicon?: (number | null) | Media;
+  /**
+   * Default font family used site-wide.
+   */
+  defaultFont: 'patrickHand' | 'inter' | 'lora';
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2567,6 +2581,7 @@ export interface FooterSelect<T extends boolean = true> {
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteTitle?: T;
   favicon?: T;
+  defaultFont?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
