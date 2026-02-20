@@ -99,7 +99,7 @@ export const NewsletterSignupForm = ({
           onChange={(event) => setEmail(event.target.value)}
           placeholder={emailPlaceholder || 'you@example.com'}
           className={cn(
-            'w-full rounded-lg border border-zinc-300 px-3 py-2.5 text-sm outline-none ring-zinc-300 placeholder:text-zinc-500 focus:ring-2',
+            'w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm text-zinc-900 caret-zinc-900 outline-none ring-zinc-300 placeholder:text-zinc-500 focus:ring-2',
             inputClassName,
           )}
           style={inputStyle}
