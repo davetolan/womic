@@ -10,6 +10,8 @@ import {
 export const Archive: Block = {
   slug: 'archive',
   interfaceName: 'ArchiveBlock',
+  imageURL: '/block-previews/archive.svg',
+  imageAltText: 'Archive grid block with cards from a collection',
   fields: [
     {
       name: 'introContent',
