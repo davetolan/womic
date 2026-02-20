@@ -11,6 +11,46 @@
 @custom-variant 2xl (@media (width >= theme(--breakpoint-2xl)));
 
 @layer base {
+  .font-theme-roboto {
+    font-family: var(--font-roboto), sans-serif;
+  }
+
+  .font-theme-open-sans {
+    font-family: var(--font-open-sans), sans-serif;
+  }
+
+  .font-theme-lato {
+    font-family: var(--font-lato), sans-serif;
+  }
+
+  .font-theme-montserrat {
+    font-family: var(--font-montserrat), sans-serif;
+  }
+
+  .font-theme-oswald {
+    font-family: var(--font-oswald), sans-serif;
+  }
+
+  .font-theme-source-sans-3 {
+    font-family: var(--font-source-sans-3), sans-serif;
+  }
+
+  .font-theme-raleway {
+    font-family: var(--font-raleway), sans-serif;
+  }
+
+  .font-theme-poppins {
+    font-family: var(--font-poppins), sans-serif;
+  }
+
+  .font-theme-merriweather {
+    font-family: var(--font-merriweather), serif;
+  }
+
+  .font-theme-nunito {
+    font-family: var(--font-nunito), sans-serif;
+  }
+
   .font-theme-patrick-hand {
     font-family: var(--font-patrick-hand), cursive;
   }
@@ -21,6 +61,10 @@
 
   .font-theme-lora {
     font-family: var(--font-lora), serif;
+  }
+
+  .font-theme-spectral {
+    font-family: var(--font-spectral), serif;
   }
 
   h1,
