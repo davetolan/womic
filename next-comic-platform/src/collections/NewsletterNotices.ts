@@ -5,6 +5,13 @@ import { getServerSideURL } from '../utilities/getURL'
 
 const RESEND_API_URL = 'https://api.resend.com/emails'
 
+type MediaReference = {
+  id?: number | null
+  url?: string | null
+  alt?: string | null
+  filename?: string | null
+}
+
 const getPathFromSlug = (
   slug: string | null | undefined,
   archivePath: string | null | undefined,
@@ -85,6 +92,59 @@ const resolveEpisodePath = async ({
   return getPathFromSlug(null, archivePath)
 }
 
+const resolveNoticeImage = async ({
+  imageRef,
+  req,
+}: {
+  imageRef: number | MediaReference | null | undefined
+  req: PayloadRequest
+}) => {
+  if (!imageRef) {
+    return null
+  }
+
+  if (typeof imageRef === 'number') {
+    const media = await req.payload.findByID({
+      collection: 'media',
+      id: imageRef,
+      depth: 0,
+      select: {
+        url: true,
+        alt: true,
+        filename: true,
+      },
+    })
+
+    if (!media.url) {
+      return null
+    }
+
+    return {
+      url: media.url,
+      alt: media.alt,
+      filename: media.filename,
+    }
+  }
+
+  if (!imageRef.url) {
+    return null
+  }
+
+  return {
+    url: imageRef.url,
+    alt: imageRef.alt,
+    filename: imageRef.filename,
+  }
+}
+
+const escapeHTML = (value: string) =>
+  value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+
 export const NewsletterNotices: CollectionConfig = {
   slug: 'newsletter-notices',
   admin: {
@@ -129,6 +189,60 @@ export const NewsletterNotices: CollectionConfig = {
       admin: {
         description: 'Used when no episode is selected. Must be a relative path.',
       },
+    },
+    {
+      name: 'image',
+      type: 'relationship',
+      relationTo: 'media',
+      admin: {
+        description: 'Optional. Add an image to include in the notice email.',
+      },
+    },
+    {
+      name: 'appearance',
+      type: 'group',
+      fields: [
+        {
+          name: 'backgroundColor',
+          type: 'text',
+          defaultValue: '#ffffff',
+          admin: {
+            description: 'Outer card background color (hex, rgb, or any valid CSS color).',
+          },
+        },
+        {
+          name: 'textColor',
+          type: 'text',
+          defaultValue: '#111827',
+          admin: {
+            description: 'Body text color.',
+          },
+        },
+        {
+          name: 'buttonColor',
+          type: 'text',
+          defaultValue: '#111827',
+          admin: {
+            description: 'CTA button background color.',
+          },
+        },
+        {
+          name: 'buttonTextColor',
+          type: 'text',
+          defaultValue: '#ffffff',
+          admin: {
+            description: 'CTA button text color.',
+          },
+        },
+        {
+          name: 'ctaLabel',
+          type: 'text',
+          defaultValue: 'Read now',
+          admin: {
+            description: 'Call-to-action label used in the email button.',
+          },
+        },
+      ],
     },
     {
       name: 'sendNotice',
@@ -199,6 +313,15 @@ export const NewsletterNotices: CollectionConfig = {
         const message = data.message || originalDoc?.message
         const archivePath = data.archivePath || originalDoc?.archivePath
         const episode = data.episode ?? originalDoc?.episode
+        const image = (data.image ?? originalDoc?.image ?? null) as number | MediaReference | null
+        const appearance = {
+          backgroundColor: data.appearance?.backgroundColor || originalDoc?.appearance?.backgroundColor || '#ffffff',
+          textColor: data.appearance?.textColor || originalDoc?.appearance?.textColor || '#111827',
+          buttonColor: data.appearance?.buttonColor || originalDoc?.appearance?.buttonColor || '#111827',
+          buttonTextColor:
+            data.appearance?.buttonTextColor || originalDoc?.appearance?.buttonTextColor || '#ffffff',
+          ctaLabel: data.appearance?.ctaLabel || originalDoc?.appearance?.ctaLabel || 'Read now',
+        }
 
         if (!subject || !message) {
           throw new Error('Subject and message are required to send a newsletter notice.')
@@ -221,8 +344,21 @@ export const NewsletterNotices: CollectionConfig = {
           req,
         })
         const episodeURL = new URL(targetPath, getServerSideURL()).toString()
-        const html = `<p>${message}</p><p><a href="${episodeURL}">Read now</a></p>`
-        const text = `${message}\n\nRead now: ${episodeURL}`
+        const resolvedImage = await resolveNoticeImage({ imageRef: image, req })
+        const imageHTML = resolvedImage
+          ? `<img src="${resolvedImage.url}" alt="${escapeHTML(resolvedImage.alt || resolvedImage.filename || 'Newsletter image')}" style="display:block;width:100%;max-width:640px;height:auto;margin:0 auto 16px;border-radius:8px;" />`
+          : ''
+
+        const ctaLabel = escapeHTML(appearance.ctaLabel)
+        const messageHTML = escapeHTML(message).replaceAll('\n', '<br />')
+        const html = `
+          <div style="background:${appearance.backgroundColor};color:${appearance.textColor};padding:24px;border-radius:12px;">
+            ${imageHTML}
+            <p style="margin:0 0 16px;line-height:1.6;">${messageHTML}</p>
+            <a href="${episodeURL}" style="display:inline-block;background:${appearance.buttonColor};color:${appearance.buttonTextColor};padding:12px 18px;text-decoration:none;border-radius:8px;font-weight:600;">${ctaLabel}</a>
+          </div>
+        `
+        const text = `${message}\n\n${appearance.ctaLabel}: ${episodeURL}`
 
         for (const email of uniqueEmails) {
           await sendEmail({
