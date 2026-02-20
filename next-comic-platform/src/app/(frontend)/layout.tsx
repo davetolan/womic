@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
-import { Patrick_Hand } from 'next/font/google'
+import { Inter, Lora, Patrick_Hand, Spectral } from 'next/font/google'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
@@ -11,6 +11,7 @@ import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { getFontClassName, getSiteFont } from '@/utilities/fonts'
 import { buildTabTitle, getCachedSiteSettings, getSiteFaviconURL, getSiteTitle } from '@/utilities/siteSettings'
 import { draftMode } from 'next/headers'
 
@@ -23,15 +24,37 @@ const patrickHand = Patrick_Hand({
   variable: '--font-patrick-hand',
 })
 
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+})
+
+const lora = Lora({
+  subsets: ['latin'],
+  variable: '--font-lora',
+})
+
+const spectral = Spectral({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-spectral',
+})
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
+  const siteSettings = await getCachedSiteSettings()()
+  const siteFontClassName = getFontClassName(getSiteFont(siteSettings))
 
   return (
-    <html className={cn(patrickHand.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
+    <html
+      className={cn(patrickHand.variable, inter.variable, lora.variable, spectral.variable, GeistMono.variable)}
+      lang="en"
+      suppressHydrationWarning
+    >
       <head>
         <InitTheme />
       </head>
-      <body>
+      <body className={siteFontClassName}>
         <Providers>
           <AdminBar
             adminBarProps={{

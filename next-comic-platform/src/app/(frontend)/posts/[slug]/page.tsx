@@ -12,6 +12,8 @@ import type { Post } from '@/payload-types'
 
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getCachedSiteSettings } from '@/utilities/siteSettings'
+import { getEffectiveFontClassName, getSiteFont } from '@/utilities/fonts'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
@@ -52,12 +54,19 @@ export default async function Post({ params: paramsPromise }: Args) {
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/posts/' + decodedSlug
+  const siteSettings = await getCachedSiteSettings()()
+  const siteFont = getSiteFont(siteSettings)
   const post = await queryPostBySlug({ slug: decodedSlug })
 
   if (!post) return <PayloadRedirects url={url} />
 
+  const postFontClassName = getEffectiveFontClassName({
+    defaultFont: siteFont,
+    override: post.fontOverride,
+  })
+
   return (
-    <article className="pt-16 pb-16">
+    <article className={`pt-16 pb-16 ${postFontClassName}`}>
       <PageClient />
 
       {/* Allows redirects for valid pages too */}

@@ -1,12 +1,25 @@
-import type { CollectionConfig } from 'payload'
+import type { Access, CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
+
+const allowUserCreation: Access = async ({ req }) => {
+  if (req.user) {
+    return true
+  }
+
+  const { totalDocs } = await req.payload.count({
+    collection: 'users',
+    overrideAccess: true,
+  })
+
+  return totalDocs === 0
+}
 
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
     admin: authenticated,
-    create: authenticated,
+    create: allowUserCreation,
     delete: authenticated,
     read: authenticated,
     update: authenticated,

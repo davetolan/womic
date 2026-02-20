@@ -101,6 +101,15 @@ export const Header: GlobalConfig = {
           type: 'checkbox',
           defaultValue: true,
         },
+        {
+          name: 'height',
+          type: 'text',
+          admin: {
+            description:
+              'Optional header height using any valid CSS size value (for example: 80px, 5rem, clamp(72px, 8vw, 108px)).',
+            placeholder: '80px',
+          },
+        },
       ],
     },
     {
@@ -204,6 +213,9 @@ export const Header: GlobalConfig = {
         link({
           overrides: {
             name: 'link',
+            admin: {
+              condition: (_, siblingData) => Boolean(siblingData?.enabled),
+            },
           },
         }),
       ],

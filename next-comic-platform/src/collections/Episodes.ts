@@ -116,7 +116,6 @@ export const Episodes: CollectionConfig = {
       name: 'episodeNumber',
       type: 'number',
       required: true,
-      unique: true,
       validate: (value: unknown) => {
         if (typeof value !== 'number' || !Number.isInteger(value) || value < 1) {
           return 'Episode number must be a whole number greater than 0.'

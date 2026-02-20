@@ -51,6 +51,7 @@ export async function Footer() {
   const colors = footerData?.colors
   const variant = style?.variant || 'dark'
   const showThemeSelector = style?.showThemeSelector !== false
+  const height = style?.height?.trim()
   const backgroundMedia =
     typeof footerData?.backgroundMedia === 'object' && footerData.backgroundMedia !== null
       ? footerData.backgroundMedia
@@ -80,6 +81,7 @@ export async function Footer() {
     ...(colors?.backgroundColor ? { backgroundColor: colors.backgroundColor } : {}),
     ...(colors?.textColor ? { color: colors.textColor } : {}),
     ...(colors?.borderColor ? { borderColor: colors.borderColor } : {}),
+    ...(height ? { minHeight: height } : {}),
   }
   const linkInlineStyle: React.CSSProperties | undefined = colors?.linkColor
     ? { color: colors.linkColor }
@@ -101,7 +103,10 @@ export async function Footer() {
           />
         </div>
       ) : null}
-      <div className="container relative py-8 gap-8 flex flex-col">
+      <div
+        className="container relative py-8 gap-8 flex flex-col"
+        style={height ? { minHeight: '100%' } : undefined}
+      >
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <Link className="flex items-start gap-3 max-w-xl" href="/">
             {logoMedia ? (

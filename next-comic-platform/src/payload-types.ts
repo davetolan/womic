@@ -71,6 +71,7 @@ export interface Config {
     categories: Category;
     pages: Page;
     posts: Post;
+    books: Book;
     chapters: Chapter;
     episodes: Episode;
     'newsletter-subscribers': NewsletterSubscriber;
@@ -98,6 +99,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    books: BooksSelect<false> | BooksSelect<true>;
     chapters: ChaptersSelect<false> | ChaptersSelect<true>;
     episodes: EpisodesSelect<false> | EpisodesSelect<true>;
     'newsletter-subscribers': NewsletterSubscribersSelect<false> | NewsletterSubscribersSelect<true>;
@@ -480,6 +482,10 @@ export interface Page {
       overlayColor?: string | null;
     };
   };
+  /**
+   * Optionally override the site-wide font for this page.
+   */
+  fontOverride?: ('default' | 'patrickHand' | 'inter' | 'lora' | 'spectral') | null;
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
   meta?: {
     title?: string | null;
@@ -582,6 +588,19 @@ export interface Chapter {
   title: string;
   slug: string;
   chapterNumber: number;
+  book: number | Book;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "books".
+ */
+export interface Book {
+  id: number;
+  title: string;
+  slug: string;
   description?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -767,6 +786,10 @@ export interface ArchiveBlock {
 export interface Post {
   id: number;
   title: string;
+  /**
+   * Optionally override the site-wide font for this post.
+   */
+  fontOverride?: ('default' | 'patrickHand' | 'inter' | 'lora' | 'spectral') | null;
   heroImage?: (number | null) | Media;
   content: {
     root: {
@@ -1315,6 +1338,10 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
+        relationTo: 'books';
+        value: number | Book;
+      } | null)
+    | ({
         relationTo: 'chapters';
         value: number | Chapter;
       } | null)
@@ -1572,6 +1599,7 @@ export interface PagesSelect<T extends boolean = true> {
               overlayColor?: T;
             };
       };
+  fontOverride?: T;
   layout?:
     | T
     | {
@@ -1685,6 +1713,7 @@ export interface FormBlockSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
+  fontOverride?: T;
   heroImage?: T;
   content?: T;
   relatedPosts?: T;
@@ -1712,12 +1741,24 @@ export interface PostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "books_select".
+ */
+export interface BooksSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "chapters_select".
  */
 export interface ChaptersSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   chapterNumber?: T;
+  book?: T;
   description?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2116,6 +2157,10 @@ export interface Header {
     containerWidth?: ('default' | 'wide') | null;
     navAlignment?: ('right' | 'left') | null;
     showSearch?: boolean | null;
+    /**
+     * Optional header height using any valid CSS size value (for example: 80px, 5rem, clamp(72px, 8vw, 108px)).
+     */
+    height?: string | null;
   };
   colors?: {
     /**
@@ -2252,6 +2297,10 @@ export interface Footer {
   style?: {
     variant?: ('dark' | 'light' | 'minimal') | null;
     showThemeSelector?: boolean | null;
+    /**
+     * Optional footer height using any valid CSS size value (for example: 240px, 18rem, clamp(220px, 30vw, 360px)).
+     */
+    height?: string | null;
   };
   colors?: {
     /**
@@ -2379,6 +2428,10 @@ export interface SiteSetting {
    * Optional favicon from Media. Recommended: square PNG/WebP/SVG at 64x64 or 128x128.
    */
   favicon?: (number | null) | Media;
+  /**
+   * Default font family used site-wide.
+   */
+  defaultFont: 'patrickHand' | 'inter' | 'lora' | 'spectral';
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2405,6 +2458,7 @@ export interface HeaderSelect<T extends boolean = true> {
         containerWidth?: T;
         navAlignment?: T;
         showSearch?: T;
+        height?: T;
       };
   colors?:
     | T
@@ -2469,6 +2523,7 @@ export interface FooterSelect<T extends boolean = true> {
     | {
         variant?: T;
         showThemeSelector?: T;
+        height?: T;
       };
   colors?:
     | T
@@ -2526,6 +2581,7 @@ export interface FooterSelect<T extends boolean = true> {
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteTitle?: T;
   favicon?: T;
+  defaultFont?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

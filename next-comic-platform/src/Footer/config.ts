@@ -61,6 +61,15 @@ export const Footer: GlobalConfig = {
           type: 'checkbox',
           defaultValue: true,
         },
+        {
+          name: 'height',
+          type: 'text',
+          admin: {
+            description:
+              'Optional footer height using any valid CSS size value (for example: 240px, 18rem, clamp(220px, 30vw, 360px)).',
+            placeholder: '240px',
+          },
+        },
       ],
     },
     {
