@@ -4,6 +4,7 @@ export const fontOptions = [
   { label: 'Patrick Hand', value: 'patrickHand' },
   { label: 'Inter', value: 'inter' },
   { label: 'Lora', value: 'lora' },
+  { label: 'Spectral', value: 'spectral' },
 ] as const
 
 export type FontOption = (typeof fontOptions)[number]['value']
@@ -16,6 +17,7 @@ const fontClassMap: Record<FontOption, string> = {
   inter: 'font-theme-inter',
   lora: 'font-theme-lora',
   patrickHand: 'font-theme-patrick-hand',
+  spectral: 'font-theme-spectral',
 }
 
 const isFontOption = (value?: string | null): value is FontOption => {

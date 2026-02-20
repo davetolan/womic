@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
-import { Inter, Lora, Patrick_Hand } from 'next/font/google'
+import { Inter, Lora, Patrick_Hand, Spectral } from 'next/font/google'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
@@ -34,6 +34,12 @@ const lora = Lora({
   variable: '--font-lora',
 })
 
+const spectral = Spectral({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-spectral',
+})
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
   const siteSettings = await getCachedSiteSettings()()
@@ -41,7 +47,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html
-      className={cn(patrickHand.variable, inter.variable, lora.variable, GeistMono.variable)}
+      className={cn(patrickHand.variable, inter.variable, lora.variable, spectral.variable, GeistMono.variable)}
       lang="en"
       suppressHydrationWarning
     >
