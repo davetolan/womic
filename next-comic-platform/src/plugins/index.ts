@@ -41,6 +41,10 @@ export const plugins: Plugin[] = [
   redirectsPlugin({
     collections: ['episodes', 'chapters'],
     overrides: {
+      admin: {
+        description:
+          'Create URL redirects so old links or changed slugs send visitors to the correct current page.',
+      },
       // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
@@ -77,7 +81,16 @@ export const plugins: Plugin[] = [
     fields: {
       payment: false,
     },
+    formSubmissionOverrides: {
+      admin: {
+        description:
+          'Stores each submitted form entry (for example contact messages) for review in admin.',
+      },
+    },
     formOverrides: {
+      admin: {
+        description: 'Create and manage reusable forms that can be placed on pages.',
+      },
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
           if ('name' in field && field.name === 'confirmationMessage') {
