@@ -213,6 +213,9 @@ export const Header: GlobalConfig = {
         link({
           overrides: {
             name: 'link',
+            admin: {
+              condition: (_, siblingData) => Boolean(siblingData?.enabled),
+            },
           },
         }),
       ],
