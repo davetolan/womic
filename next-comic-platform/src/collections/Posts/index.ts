@@ -138,7 +138,7 @@ export const Posts: CollectionConfig<'posts'> = {
               admin: {
                 position: 'sidebar',
                 description:
-                  'Assign categories for organization and archive filtering. Category links only work if your site has a category page. If a category link opens a 404 page, ask your developer to add category pages.',
+                  'Assign categories for organization and archive filtering. Category links use category pages at /categories/{category-slug}.',
               },
               hasMany: true,
               relationTo: 'categories',

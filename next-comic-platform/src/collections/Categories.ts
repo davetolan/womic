@@ -15,7 +15,7 @@ export const Categories: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     description:
-      "Organize posts into topics so readers can browse related content. To link to a category in Header/Footer, choose Custom URL and enter /categories/{category-slug}. Replace {category-slug} with this category's slug. If the link opens a 404 page, ask your developer to add category pages.",
+      "Organize posts into topics so readers can browse related content. To link to a category in Header/Footer, choose Custom URL and enter /categories/{category-slug}. Replace {category-slug} with this category's slug.",
   },
   fields: [
     {
