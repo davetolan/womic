@@ -4,6 +4,7 @@ import * as migration_20260219_212528_add_books_hierarchy from './20260219_21252
 import * as migration_20260219_235204_add_header_footer_height from './20260219_235204_add_header_footer_height';
 import * as migration_20260220_000001_add_font_settings from './20260220_000001_add_font_settings';
 import * as migration_20260220_003000_ensure_font_columns from './20260220_003000_ensure_font_columns';
+import * as migration_20260220_030504_add_newsletter_signup_block_tables from './20260220_030504_add_newsletter_signup_block_tables';
 
 export const migrations = [
   {
@@ -19,21 +20,26 @@ export const migrations = [
   {
     up: migration_20260219_212528_add_books_hierarchy.up,
     down: migration_20260219_212528_add_books_hierarchy.down,
-    name: '20260219_212528_add_books_hierarchy'
+    name: '20260219_212528_add_books_hierarchy',
   },
   {
     up: migration_20260219_235204_add_header_footer_height.up,
     down: migration_20260219_235204_add_header_footer_height.down,
-    name: '20260219_235204_add_header_footer_height'
+    name: '20260219_235204_add_header_footer_height',
   },
   {
     up: migration_20260220_000001_add_font_settings.up,
     down: migration_20260220_000001_add_font_settings.down,
-    name: '20260220_000001_add_font_settings'
+    name: '20260220_000001_add_font_settings',
   },
   {
     up: migration_20260220_003000_ensure_font_columns.up,
     down: migration_20260220_003000_ensure_font_columns.down,
-    name: '20260220_003000_ensure_font_columns'
+    name: '20260220_003000_ensure_font_columns',
+  },
+  {
+    up: migration_20260220_030504_add_newsletter_signup_block_tables.up,
+    down: migration_20260220_030504_add_newsletter_signup_block_tables.down,
+    name: '20260220_030504_add_newsletter_signup_block_tables'
   },
 ];
