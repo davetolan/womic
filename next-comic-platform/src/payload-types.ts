@@ -485,7 +485,7 @@ export interface Page {
   /**
    * Optionally override the site-wide font for this page.
    */
-  fontOverride?: ('default' | 'patrickHand' | 'inter' | 'lora') | null;
+  fontOverride?: ('default' | 'patrickHand' | 'inter' | 'lora' | 'spectral') | null;
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
   meta?: {
     title?: string | null;
@@ -789,7 +789,7 @@ export interface Post {
   /**
    * Optionally override the site-wide font for this post.
    */
-  fontOverride?: ('default' | 'patrickHand' | 'inter' | 'lora') | null;
+  fontOverride?: ('default' | 'patrickHand' | 'inter' | 'lora' | 'spectral') | null;
   heroImage?: (number | null) | Media;
   content: {
     root: {
@@ -2431,7 +2431,7 @@ export interface SiteSetting {
   /**
    * Default font family used site-wide.
    */
-  defaultFont: 'patrickHand' | 'inter' | 'lora';
+  defaultFont: 'patrickHand' | 'inter' | 'lora' | 'spectral';
   updatedAt?: string | null;
   createdAt?: string | null;
 }
