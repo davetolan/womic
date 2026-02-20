@@ -245,6 +245,15 @@ export const NewsletterNotices: CollectionConfig = {
       ],
     },
     {
+      name: 'emailPreview',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '@/components/NewsletterNoticeEmailPreview',
+        },
+      },
+    },
+    {
       name: 'sendNotice',
       type: 'checkbox',
       defaultValue: false,
