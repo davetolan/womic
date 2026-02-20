@@ -1234,6 +1234,32 @@ export interface NewsletterNotice {
    */
   archivePath?: string | null;
   /**
+   * Optional. Add an image to include in the notice email.
+   */
+  image?: (number | null) | Media;
+  appearance?: {
+    /**
+     * Outer card background color (hex, rgb, or any valid CSS color).
+     */
+    backgroundColor?: string | null;
+    /**
+     * Body text color.
+     */
+    textColor?: string | null;
+    /**
+     * CTA button background color.
+     */
+    buttonColor?: string | null;
+    /**
+     * CTA button text color.
+     */
+    buttonTextColor?: string | null;
+    /**
+     * Call-to-action label used in the email button.
+     */
+    ctaLabel?: string | null;
+  };
+  /**
    * Check and save to send this notice to all newsletter subscribers.
    */
   sendNotice?: boolean | null;
@@ -2012,6 +2038,16 @@ export interface NewsletterNoticesSelect<T extends boolean = true> {
   message?: T;
   episode?: T;
   archivePath?: T;
+  image?: T;
+  appearance?:
+    | T
+    | {
+        backgroundColor?: T;
+        textColor?: T;
+        buttonColor?: T;
+        buttonTextColor?: T;
+        ctaLabel?: T;
+      };
   sendNotice?: T;
   recipientCount?: T;
   sentAt?: T;
