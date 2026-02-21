@@ -1,0 +1,8 @@
+/* Keep admin select/listbox overlays above sticky save controls and document banners. */
+.payload-admin {
+  [role='listbox'],
+  .rs__menu,
+  .rs__menu-portal {
+    z-index: 1200;
+  }
+}
