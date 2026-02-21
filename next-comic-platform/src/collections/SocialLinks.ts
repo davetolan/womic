@@ -11,7 +11,7 @@ export const SocialLinks: CollectionConfig = {
   slug: 'social-links',
   admin: {
     useAsTitle: 'label',
-    defaultColumns: ['label', 'platform', 'url', 'updatedAt'],
+    defaultColumns: ['label', 'url', 'updatedAt'],
     group: 'Marketing',
     hideAPIURL: true,
     description: 'Manage social profile links used in the global footer and other social sections.',
@@ -35,6 +35,7 @@ export const SocialLinks: CollectionConfig = {
       name: 'platform',
       type: 'select',
       required: true,
+      defaultValue: 'other',
       options: [
         { label: 'Instagram', value: 'instagram' },
         { label: 'TikTok', value: 'tiktok' },
@@ -47,6 +48,9 @@ export const SocialLinks: CollectionConfig = {
         { label: 'Discord', value: 'discord' },
         { label: 'Other', value: 'other' },
       ],
+      admin: {
+        hidden: true,
+      },
     },
     {
       name: 'url',
