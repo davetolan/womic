@@ -21,7 +21,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   const pathname = usePathname()
 
   useEffect(() => {
-    setHeaderTheme(null)
+    const forcedTheme = pathname?.startsWith('/archive') ? 'light' : null
+    setHeaderTheme(forcedTheme)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 
@@ -102,9 +103,14 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       style={headerInlineStyle}
       {...(theme ? { 'data-theme': theme } : {})}
     >
-      <div className={cn(containerWidth === 'wide' ? 'mx-auto max-w-screen-2xl px-6' : 'container')}>
+      <div
+        className={cn(containerWidth === 'wide' ? 'mx-auto max-w-screen-2xl px-6' : 'container')}
+      >
         <div
-          className={cn('py-6 flex items-center gap-6', navAlignment === 'left' ? 'justify-start' : 'justify-between')}
+          className={cn(
+            'py-6 flex items-center gap-6',
+            navAlignment === 'left' ? 'justify-start' : 'justify-between',
+          )}
           style={height ? { minHeight: '100%' } : undefined}
         >
           <Link className="flex items-center gap-3 min-w-0" href="/">
@@ -119,7 +125,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             ) : null}
             {brand?.showTitle ? (
               <span className="min-w-0">
-                <span className="block truncate text-sm font-semibold">{brand?.title || 'Site Title'}</span>
+                <span className="block truncate text-sm font-semibold">
+                  {brand?.title || 'Site Title'}
+                </span>
                 {brand?.subtitle ? (
                   <span
                     className={cn(

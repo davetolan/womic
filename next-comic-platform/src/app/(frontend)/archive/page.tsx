@@ -11,7 +11,9 @@ export const dynamic = 'force-dynamic'
 const getThumbnailURL = (episode: Episode): string => {
   const thumbnailSource =
     (episode.thumbnail && typeof episode.thumbnail === 'object' && episode.thumbnail) ||
-    (episode.pages?.[0]?.image && typeof episode.pages[0].image === 'object' && episode.pages[0].image) ||
+    (episode.pages?.[0]?.image &&
+      typeof episode.pages[0].image === 'object' &&
+      episode.pages[0].image) ||
     null
 
   if (thumbnailSource) {
@@ -97,7 +99,9 @@ export default async function ArchivePage() {
                     Episode {episode.episodeNumber}
                   </p>
                   <h2 className="text-lg font-semibold">{episode.title}</h2>
-                  <p className="text-sm text-zinc-600">Published {formatDate(episode.publishDate)}</p>
+                  <p className="text-sm text-zinc-600">
+                    Published {formatDate(episode.publishDate)}
+                  </p>
                   <Link
                     href={`/episode/${episode.slug}/1`}
                     className="mt-1 inline-flex items-center justify-center rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-700"
