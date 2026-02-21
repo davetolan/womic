@@ -18,7 +18,7 @@ type Args = {
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { q: query } = await searchParamsPromise
   const trimmedQuery = query?.trim()
-  const likeQuery = trimmedQuery ? `%${trimmedQuery}%` : null
+  const normalizedQuery = trimmedQuery || null
   const payload = await getPayload({ config: configPromise })
 
   const results = await payload.find({
@@ -30,31 +30,32 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       slug: true,
       categories: true,
       meta: true,
+      doc: true,
     },
     // pagination: false reduces overhead if you don't need totalDocs
     pagination: false,
-    ...(likeQuery
+    ...(normalizedQuery
       ? {
           where: {
             or: [
               {
                 title: {
-                  like: likeQuery,
+                  like: normalizedQuery,
                 },
               },
               {
                 'meta.description': {
-                  like: likeQuery,
+                  like: normalizedQuery,
                 },
               },
               {
                 'meta.title': {
-                  like: likeQuery,
+                  like: normalizedQuery,
                 },
               },
               {
                 slug: {
-                  like: likeQuery,
+                  like: normalizedQuery,
                 },
               },
             ],
