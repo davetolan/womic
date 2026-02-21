@@ -40,5 +40,5 @@ export const getCachedLatestEpisode = () =>
 export const getCachedArchiveEpisodes = () =>
   unstable_cache(async () => getArchiveEpisodes(), [EPISODES_TAG, 'episodes_archive'], {
     tags: [EPISODES_TAG],
+    revalidate: 60,
   })
-
