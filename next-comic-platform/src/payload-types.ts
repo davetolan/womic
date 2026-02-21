@@ -491,7 +491,25 @@ export interface Page {
   /**
    * Optionally override the site-wide font for this page.
    */
-  fontOverride?: ('default' | 'patrickHand' | 'inter' | 'lora' | 'spectral') | null;
+  fontOverride?:
+    | (
+        | 'default'
+        | 'roboto'
+        | 'openSans'
+        | 'lato'
+        | 'montserrat'
+        | 'oswald'
+        | 'sourceSans3'
+        | 'raleway'
+        | 'poppins'
+        | 'merriweather'
+        | 'nunito'
+        | 'patrickHand'
+        | 'inter'
+        | 'lora'
+        | 'spectral'
+      )
+    | null;
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | NewsletterSignupBlock)[];
   meta?: {
     title?: string | null;
@@ -801,7 +819,25 @@ export interface Post {
   /**
    * Optionally override the site-wide font for this post.
    */
-  fontOverride?: ('default' | 'patrickHand' | 'inter' | 'lora' | 'spectral') | null;
+  fontOverride?:
+    | (
+        | 'default'
+        | 'roboto'
+        | 'openSans'
+        | 'lato'
+        | 'montserrat'
+        | 'oswald'
+        | 'sourceSans3'
+        | 'raleway'
+        | 'poppins'
+        | 'merriweather'
+        | 'nunito'
+        | 'patrickHand'
+        | 'inter'
+        | 'lora'
+        | 'spectral'
+      )
+    | null;
   /**
    * Choose the post hero style: None hides the hero image area. High Impact is cinematic, Medium is balanced, Low is compact.
    */
@@ -2678,7 +2714,21 @@ export interface SiteSetting {
   /**
    * Default font family used site-wide.
    */
-  defaultFont: 'patrickHand' | 'inter' | 'lora' | 'spectral';
+  defaultFont:
+    | 'roboto'
+    | 'openSans'
+    | 'lato'
+    | 'montserrat'
+    | 'oswald'
+    | 'sourceSans3'
+    | 'raleway'
+    | 'poppins'
+    | 'merriweather'
+    | 'nunito'
+    | 'patrickHand'
+    | 'inter'
+    | 'lora'
+    | 'spectral';
   updatedAt?: string | null;
   createdAt?: string | null;
 }

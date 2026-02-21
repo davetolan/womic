@@ -1,6 +1,16 @@
 import type { SiteSetting } from '@/payload-types'
 
 export const fontOptions = [
+  { label: 'Roboto', value: 'roboto' },
+  { label: 'Open Sans', value: 'openSans' },
+  { label: 'Lato', value: 'lato' },
+  { label: 'Montserrat', value: 'montserrat' },
+  { label: 'Oswald', value: 'oswald' },
+  { label: 'Source Sans 3', value: 'sourceSans3' },
+  { label: 'Raleway', value: 'raleway' },
+  { label: 'Poppins', value: 'poppins' },
+  { label: 'Merriweather', value: 'merriweather' },
+  { label: 'Nunito', value: 'nunito' },
   { label: 'Patrick Hand', value: 'patrickHand' },
   { label: 'Inter', value: 'inter' },
   { label: 'Lora', value: 'lora' },
@@ -14,6 +24,16 @@ export const defaultFont: FontOption = 'patrickHand'
 export const fontOverrideOptions = [{ label: 'Use site default', value: 'default' }, ...fontOptions] as const
 
 const fontClassMap: Record<FontOption, string> = {
+  roboto: 'font-theme-roboto',
+  openSans: 'font-theme-open-sans',
+  lato: 'font-theme-lato',
+  montserrat: 'font-theme-montserrat',
+  oswald: 'font-theme-oswald',
+  sourceSans3: 'font-theme-source-sans-3',
+  raleway: 'font-theme-raleway',
+  poppins: 'font-theme-poppins',
+  merriweather: 'font-theme-merriweather',
+  nunito: 'font-theme-nunito',
   inter: 'font-theme-inter',
   lora: 'font-theme-lora',
   patrickHand: 'font-theme-patrick-hand',

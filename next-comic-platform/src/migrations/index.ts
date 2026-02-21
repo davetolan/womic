@@ -8,6 +8,7 @@ import * as migration_20260220_030504_add_newsletter_signup_block_tables from '.
 import * as migration_20260220_032111_add_newsletter_signup_customization_fields from './20260220_032111_add_newsletter_signup_customization_fields';
 import * as migration_20260220_040000_add_newsletter_notice_customization from './20260220_040000_add_newsletter_notice_customization';
 import * as migration_20260220_050000_add_post_impact from './20260220_050000_add_post_impact';
+import * as migration_20260220_060000_add_google_font_options from './20260220_060000_add_google_font_options';
 
 export const migrations = [
   {
@@ -59,5 +60,10 @@ export const migrations = [
     up: migration_20260220_050000_add_post_impact.up,
     down: migration_20260220_050000_add_post_impact.down,
     name: '20260220_050000_add_post_impact'
+  },
+  {
+    up: migration_20260220_060000_add_google_font_options.up,
+    down: migration_20260220_060000_add_google_font_options.down,
+    name: '20260220_060000_add_google_font_options'
   },
 ];
