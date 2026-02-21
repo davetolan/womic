@@ -125,6 +125,16 @@ export const Pages: CollectionConfig<'pages'> = {
       ],
     },
     {
+      name: 'pageURLPreview',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: '@/components/PageURLPreview',
+        },
+      },
+    },
+    {
       name: 'publishedAt',
       type: 'date',
       admin: {
