@@ -8,6 +8,10 @@ const PageClient: React.FC = () => {
 
   useEffect(() => {
     setHeaderTheme('light')
+
+    return () => {
+      setHeaderTheme(null)
+    }
   }, [setHeaderTheme])
   return <React.Fragment />
 }
