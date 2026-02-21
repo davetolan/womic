@@ -17,6 +17,8 @@ type Args = {
 }
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { q: query } = await searchParamsPromise
+  const trimmedQuery = query?.trim()
+  const likeQuery = trimmedQuery ? `%${trimmedQuery}%` : null
   const payload = await getPayload({ config: configPromise })
 
   const results = await payload.find({
@@ -31,28 +33,28 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
     },
     // pagination: false reduces overhead if you don't need totalDocs
     pagination: false,
-    ...(query
+    ...(likeQuery
       ? {
           where: {
             or: [
               {
                 title: {
-                  like: query,
+                  like: likeQuery,
                 },
               },
               {
                 'meta.description': {
-                  like: query,
+                  like: likeQuery,
                 },
               },
               {
                 'meta.title': {
-                  like: query,
+                  like: likeQuery,
                 },
               },
               {
                 slug: {
-                  like: query,
+                  like: likeQuery,
                 },
               },
             ],

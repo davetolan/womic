@@ -3,16 +3,20 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import React, { useState, useEffect } from 'react'
 import { useDebounce } from '@/utilities/useDebounce'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export const Search: React.FC = () => {
-  const [value, setValue] = useState('')
+  const searchParams = useSearchParams()
+  const initialQuery = searchParams.get('q') || ''
+  const [value, setValue] = useState(initialQuery)
   const router = useRouter()
 
   const debouncedValue = useDebounce(value)
 
   useEffect(() => {
-    router.push(`/search${debouncedValue ? `?q=${debouncedValue}` : ''}`)
+    const trimmedValue = debouncedValue.trim()
+    const target = `/search${trimmedValue ? `?q=${encodeURIComponent(trimmedValue)}` : ''}`
+    router.push(target)
   }, [debouncedValue, router])
 
   return (
